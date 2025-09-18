@@ -24,21 +24,32 @@
         p {
             font-size: 1.5rem;
         }
-        a {
-            color: #ffd700;
-            text-decoration: none;
+        .button {
+            background-color: #ffd700;
+            color: #1f1c2c;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            margin-top: 1rem;
-            display: inline-block;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            text-decoration: none;
         }
-        a:hover {
-            text-decoration: underline;
+        .button:hover {
+            background-color: #e6c200;
         }
     </style>
 </head>
 <body>
     <h1>Willkommen bei Mystische Synthese</h1>
     <p>🎶 GitHub Pages läuft erfolgreich!</p>
-    <a href="storybook.html">Zur Storybook-Seite</a>
+    
+    <!-- Button zur Storybook-Seite -->
+    <a class="button" href="storybook.html">Weiter zur Storybook-Seite</a>
+    <!--
+         Hinweis: Wenn deine storybook.html in einem Unterordner liegt, passe href an:
+         Beispiel: href="unterordner/storybook.html"
+    -->
 </body>
 </html>
