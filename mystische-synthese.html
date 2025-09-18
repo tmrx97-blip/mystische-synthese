@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystische Synthese: Eine Reise ins Sein</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #f0f8ff, #e6f3ff);
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #4a5d70;
+            font-size: 2em;
+        }
+        .chapter {
+            display: none;
+            margin-bottom: 40px;
+        }
+        .chapter.active {
+            display: block;
+            animation: fadeIn 3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .text {
+            font-size: 1.1em;
+            font-style: italic;
+            text-align: justify;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.7);
+            border-left: 4px solid #a8d5ba;
+        }
+        .question {
+            font-weight: bold;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #a8d5ba;
+            color: #333;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #6b7280;
+            color: white;
+        }
+        .heart-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .heart {
+            font-size: 60px;
+            color: #e74c3c;
+            animation: pulse 1s infinite;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .candle-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .candle {
+            width: 100px;
+            height: 200px;
+            background: #f5e8c7;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+        .candle-flame {
+            display: none;
+            width: 20px;
+            height: 30px;
+            background: radial-gradient(circle at 50% 0, #ffcc00, #ff9900);
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            top: -30px;
+            left: 40px;
+            animation: flicker 1.5s infinite;
+        }
+        .candle.lit .candle-flame {
+            display: block;
+        }
+        @keyframes flicker {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Mystische Synthese: Eine Reise ins Sein</h1>
+    
+    <div id="ch1" class="chapter active">
+        <h2>Kapitel 1: Im Hier und Jetzt</h2>
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop" alt="Ein ruhiger See bei Sonnenaufgang, das Licht spiegelt sich im Wasser, ein einzelner Vogel fliegt über die Oberfläche." loading="lazy">
+        <div class="text">
+            Alles, was du suchst, ist schon hier.<br>
+            Atme ein. Spüre den Boden unter deinen Füßen.<br>
+            Atme aus. Lass los, was war und was sein wird.<br>
+            Hier, in diesem Moment, bist du ganz.<br>
+            Hier, in diesem Moment, ist alles eins.<br>
+            Du musst nichts erreichen.<br>
+            Du darfst einfach sein.
+        </div>
+        <div class="question">Was spürst du in diesem Hier und Jetzt, das dich ganz macht? Lass es in Worte fassen, um den Übergang zur Tiefe deiner Seele vorzubereiten.</div>
+        <textarea id="note1" placeholder="Deine Reflexion..."></textarea>
+        <button onclick="nextChapter(2)">Zur Tiefe der Seele reisen</button>
+        <p class="text" style="font-style: normal;">Atme und klicke, um die Tiefe zu betreten.</p>
+    </div>
+    
+    <div id="ch2" class="chapter">
+        <h2>Kapitel 2: Der Grund deiner Seele</h2>
+        <img src="https://images.unsplash.com/photo-1502085671122-2d218cd434e6?w=800&h=400&fit=crop" alt="Eine majestätische Eiche, tief verwurzelt, im warmen Licht, das durch die Blätter bricht." loading="lazy">
+        <div class="text">
+            Tiefer als deine Gedanken, tiefer als deine Gefühle –<br>
+            da ist eine Stille, die dich trägt.<br>
+            Meister Eckhart nannte sie den ‚Grund der Seele‘.<br>
+            Hier bist du nicht getrennt.<br>
+            Hier bist du verbunden mit allem, was ist.<br>
+            Gott ist nicht fern.<br>
+            Er ist das, was dich atmen lässt.<br>
+            Er ist das, was dich liebt, ohne dass du es verdienen musst.
+        </div>
+        <div class="question">Wo fühlst du diesen Grund in dir – eine Stelle der Stille, die dich zur Begegnung mit dem Anderen ruft?</div>
+        <textarea id="note2" placeholder="Deine Reflexion..."></textarea>
+        <button onclick="nextChapter(3)">Zur heiligen Begegnung eilen</button>
+    </div>
+    
+    <div id="ch3" class="chapter">
+        <h2>Kapitel 3: Ich und Du – Die Begegnung</h2>
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=400&fit=crop" alt="Zwei Menschen, die sich in einer natürlichen Umgebung sehr freundlich gegenüberstehen, umgeben von einem harmonischen Landschaftsbild mit Bergen." loading="lazy">
+        <div class="text">
+            Martin Buber sagte: ‚Alles wirkliche Leben ist Begegnung.‘<br>
+            Wenn du einem anderen Menschen wirklich begegnest –<br>
+            ohne Erwartung, ohne Vorbehalt –<br>
+            dann spürst du: Hier ist etwas Heiliges.<br>
+            Und wenn du dich Gott zuwendest,<br>
+            nicht als Idee, sondern als Du,<br>
+            dann antwortet Er.<br>
+            Dann ist da eine Gegenwart, die dich hält.<br>
+            Du bist nicht allein.<br>
+            Du bist in Beziehung.<br>
+            Du bist geliebt.
+        </div>
+        <div class="question">In welcher Begegnung deines Lebens hast du diese Heiligkeit schon einmal gespürt – ein Moment, der dich zur Einheit der Advaita führt?</div>
+        <textarea id="note3" placeholder="Deine Reflexion..."></textarea>
+        <div class="heart-container">
+            <div class="heart">❤️</div>
+            <p>Du bist jetzt eingeladen, für 60 Sekunden innezuhalten. Danach klicke bitte auf den Knopf für Deine weitere Reise.</p>
+        </div>
+        <button onclick="nextChapter(4)">Zur ungeteilten Einheit gleiten</button>
+    </div>
+    
+    <div id="ch4" class="chapter">
+        <h2>Kapitel 4: Nicht getrennt – Advaita</h2>
+        <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=400&fit=crop" alt="Ein weites, offenes Feld unter einem sternenklaren Himmel, die Milchstraße leuchtet." loading="lazy">
+        <div class="text">
+            Die alten Weisen Indiens sagen:<br>
+            Du bist nicht der Körper.<br>
+            Du bist nicht der Verstand.<br>
+            Du bist das reine Bewusstsein –<br>
+            ungeteilt, frei, eins mit allem.<br>
+            Was du suchst, bist du selbst.<br>
+            Du bist die Stille hinter allen Gedanken.<br>
+            Du bist das Licht hinter allen Formen.<br>
+            Du bist nicht getrennt.<br>
+            Du bist das Ganze.
+        </div>
+        <div class="question">Was erkennst du in dir als dieses reine Bewusstsein – ein Licht, das dich zur Quelle Jesu leitet?</div>
+        <textarea id="note4" placeholder="Deine Reflexion..."></textarea>
+        <button onclick="nextChapter(5)">Zur Quelle fließen</button>
+    </div>
+    
+    <div id="ch5" class="chapter">
+        <h2>Kapitel 5: Aus der Quelle leben</h2>
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop" alt="Ein klarer Bach, der durch einen Wald fließt, das Wasser glitzert im Sonnenlicht." loading="lazy">
+        <div class="text">
+            Jesus sagte: ‚Ich bin die Quelle.<br>
+            Wer zu mir kommt, wird nie mehr durstig sein.‘<br>
+            Diese Quelle ist in dir.<br>
+            Sie fließt, wenn du still wirst.<br>
+            Sie fließt, wenn du liebst.<br>
+            Sie fließt, wenn du handelst –<br>
+            nicht aus Angst, nicht aus Pflicht,<br>
+            sondern aus Fülle.<br>
+            Lass dich von ihr tragen.<br>
+            Lass dich von ihr führen.<br>
+            Du musst nichts werden.<br>
+            Du darfst einfach sein.
+        </div>
+        <div class="question">Wo spürst du diese Quelle in deinem Alltag fließen – ein Strom, der dich zur großen Verbundenheit trägt?</div>
+        <textarea id="note5" placeholder="Deine Reflexion..."></textarea>
+        <button onclick="nextChapter(6)">Zur Verbundenheit erblühen</button>
+    </div>
+    
+    <div id="ch6" class="chapter">
+        <h2>Kapitel 6: Verbunden mit Allem</h2>
+        <img src="https://via.placeholder.com/800x400.png?text=Mandala+mit+Baum,+Vogel,+Mensch,+Berg+in+goldenem+Licht" alt="Ein Mandala mit einem Kreis, vier Sektoren (Baum, Vogel, Mensch, Berg), umrahmt von einem Rand aus Blüten in goldenem Licht." loading="lazy">
+        <div class="text">
+            Am Ende bleibt nur dies:<br>
+            Du bist.<br>
+            Und in diesem Sein<br>
+            bist du verbunden –<br>
+            mit dem Baum, der wächst,<br>
+            mit dem Vogel, der singt,<br>
+            mit dem Stern, der leuchtet,<br>
+            mit dem Menschen, der lacht,<br>
+            mit dem, der weint.<br>
+            Alles ist eins.<br>
+            Alles ist heilig.<br>
+            Alles ist Liebe.
+        </div>
+        <div class="question">Wie fühlst du dich nun in dieser Verbundenheit – ein Faden, der alles webt?</div>
+        <textarea id="note6" placeholder="Deine Reflexion..."></textarea>
+        <button onclick="showEnd()">Zum Abschluss</button>
+    </div>
+    
+    <div id="end" class="chapter">
+        <h2>Der stille Abschluss</h2>
+        <p>Du hast die Reise vollendet. Die Synthese – Eckharts Grund, Bubers Du, die Einheit des Advaita, die Quelle Christi, die Verbundenheit des Buddhismus – pulsiert nun in dir.</p>
+        <div class="candle-container">
+            <div class="candle" onclick="lightCandle(this)">
+                <div class="candle-flame"></div>
+            </div>
+            <p>Klicke auf die Kerze, um dein inneres Licht zu entzünden – ein Ritual, das diese Reise besiegelt.</p>
+        </div>
+        <p class="text"><em>Trage dieses Licht mit dir. Möge es dich leiten, dich verbinden und dich erinnern: Du bist eins mit allem, was ist. Diese Reise endet nicht – sie beginnt neu in jedem Atemzug.</em></p>
+    </div>
+    
+    <script>
+        function nextChapter(ch) {
+            const note = document.getElementById('note' + (ch-1)).value;
+            if (note) localStorage.setItem('note' + (ch-1), note);
+            document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
+            const next = document.getElementById('ch' + ch);
+            if (next) {
+                next.classList.add('active');
+                const prevNote = localStorage.getItem('note' + ch);
+                if (prevNote) document.getElementById('note' + ch).value = prevNote;
+            } else {
+                console.log('Kapitel ' + ch + ' nicht gefunden!');
+            }
+        }
+        function showEnd() {
+            const note6 = document.getElementById('note6').value;
+            if (note6) localStorage.setItem('note6', note6);
+            document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
+            document.getElementById('end').classList.add('active');
+        }
+        function lightCandle(candle) {
+            candle.classList.add('lit');
+        }
+        window.onload = function() {
+            for (let i = 1; i <= 6; i++) {
+                const saved = localStorage.getItem('note' + i);
+                if (saved) document.getElementById('note' + i).value = saved;
+            }
+        };
+    </script>
+</body>
+</html>
