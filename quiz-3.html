@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Der Lebens-Check | Web App</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LebensCheck">
+    
+    <style>
+        :root { --primary: #2c3e50; --accent: #d35400; --bg: #fdf2e9; --card-bg: #ffffff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--bg); color: var(--primary); margin: 0; display: flex; justify-content: center; padding: env(safe-area-inset-top) 20px; }
+        .container { width: 100%; max-width: 650px; background: var(--card-bg); padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); margin-top: 20px; text-align: center; }
+        h1 { font-size: 26px; color: var(--accent); margin-bottom: 5px; }
+        .input-group { margin: 15px 0; text-align: left; }
+        label { font-weight: bold; font-size: 14px; margin-left: 5px; color: #7f8c8d; }
+        input, select { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 15px; font-size: 17px; margin-top: 5px; box-sizing: border-box; -webkit-appearance: none; }
+        .btn-stack { display: flex; gap: 12px; margin-top: 25px; }
+        button { flex: 2; background: var(--accent); color: white; border: none; padding: 18px; font-size: 18px; font-weight: bold; border-radius: 15px; cursor: pointer; transition: 0.1s; }
+        button.back { flex: 1; background: #bdc3c7; }
+        button:active { transform: scale(0.98); opacity: 0.9; }
+        .result-val { font-size: 26px; font-weight: 900; color: var(--accent); display: block; margin: 15px 0; line-height: 1.2; padding: 10px; background: #fff5eb; border-radius: 12px; }
+        .explanation { background: #fef9f5; padding: 22px; border-left: 6px solid var(--accent); border-radius: 12px; text-align: left; font-size: 15px; line-height: 1.6; color: #2c3e50; margin-top: 15px; }
+        .quiz-step { display: none; }
+        .quiz-step.active { display: block; animation: slide 0.4s ease-out; }
+        @keyframes slide { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="step-0" class="quiz-step active">
+        <h1>Dein Lebens-Check</h1>
+        <p>Präzise Daten & biologische Wunder<br><small>Inspiriert von Giulia & Jill Enders</small></p>
+        <div class="input-group">
+            <label>Wann ging die Reise los?</label>
+            <input type="date" id="birthdate" value="1970-01-01">
+        </div>
+        <div class="input-group">
+            <label>Und wo?</label>
+            <select id="location">
+                <option value="Jena">Jena</option>
+                <option value="Erfurt">Erfurt</option>
+                <option value="Gera">Gera</option>
+                <option value="Brotterode">Brotterode</option>
+            </select>
+        </div>
+        <button onclick="startQuiz()">Check starten</button>
+    </div>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    let userData = { days: 0, years: 0, loc: '', date: null };
+    const birthDb = {
+        Jena: { p1: 1761, p2: 650, p3: 1350 },
+        Erfurt: { p1: 2800, p2: 1100, p3: 2100 },
+        Gera: { p1: 1600, p2: 450, p3: 850 },
+        Brotterode: { p1: 75, p2: 25, p3: 45 }
+    };
+
+    function startQuiz() {
+        const bInput = document.getElementById('birthdate').value;
+        const bdate = new Date(bInput);
+        userData.days = Math.floor((new Date() - bdate) / (1000 * 60 * 60 * 24));
+        userData.years = userData.days / 365.2425;
+        userData.loc = document.getElementById('location').value;
+        userData.date = bdate;
+        renderStep(1);
+    }
+
+    function getStepData(step) {
+        const d = userData.days; const y = userData.years; const loc = userData.loc;
+        let res = "", exp = "";
+
+        switch(step) {
+            case 1:
+                let total = 0; let sY = userData.date.getFullYear();
+                for(let i=sY; i<=2026; i++) {
+                    let db = birthDb[loc];
+                    total += (i<1990) ? db.p1 : (i<2000 ? db.p2 : db.p3);
+                }
+                res = Math.floor(total).toLocaleString('de-DE') + " Babys";
+                exp = `In ${loc} kamen seit deiner Geburt Zehntausende neue Erdenbürger an. Jill Enders beschreibt in 'Organisch', dass wir unseren Körper als Teamplayer verstehen müssen – genau wie die Bewohner einer Stadt. Jedes Organ übernimmt eine soziale Rolle für das Ganze. Dass du hier stehst, ist das Ergebnis einer lückenlosen Zusammenarbeit von Billionen Zellen, die sich sekündlich für dich absprechen!`;
+                break;
+            case 2:
+                res = Math.floor(y * 1650).toLocaleString('de-DE') + " Stunden";
+                exp = "Die Sonne ist nicht nur hell, sie ist pure Information für deine Organe. Über die Haut bildet sie Vitamin D, das wie ein Dirigent in dein Immunsystem eingreift. In 'Organisch' lernen wir, dass Lichtsignale über unsere Netzhaut direkt dein hormonelles Gleichgewicht steuern. Dein Körper braucht diese 'Überstunden' der Sonne, um innerlich nicht aus dem Takt zu geraten!";
+                break;
+            case 3:
+                let kgFood = d * 1.0; 
+                let rTotal = kgFood / 250; 
+                let eTotal = kgFood / 5000; 
+                res = `${rTotal.toFixed(1)} ganze Rinder ODER ${eTotal.toFixed(1)} ganze Elefanten`;
+                exp = `Und stell dir jetzt bitte nicht vor, wie der Elefant wieder rauskommt! Giulia Enders erklärt in 'Darm mit Charme', dass dein Darm ein hochsensibles Sortierwerk ist, das aus dieser gewaltigen Masse jedes Gramm Energie herausholt. Dein Bauchgehirn entscheidet dabei ganz allein, was in dein Blut darf und was als Müll deklariert wird. Ein echtes Hochleistungssortierzentrum direkt unter deinem Bauchnabel!`;
+                break;
+            case 4:
+                res = Math.floor(d / 28).toLocaleString('de-DE') + ". Haut";
+                exp = "Du bist quasi eine wandelnde Baustelle, die sich alle 4 Wochen komplett neu verputzt! Die Haut ist laut 'Organisch' nicht nur eine Hülle, sondern ein hochaktives Sinnesorgan und deine erste Verteidigungslinie zur Außenwelt. Wenn dein Darm glücklich ist, zeigt deine Haut das mit einem gesunden Glanz. Wahre Schönheit ist also das Ergebnis einer exzellenten inneren Logistik!";
+                break;
+            case 5:
+                let hM = (d * 131000) / (1500 * 9.81); let eiffel = hM / 330;
+                res = `${Math.floor(hM).toLocaleString('de-DE')} Meter`;
+                exp = `Das wären ca. ${eiffel.toFixed(1)} Mal den Eiffelturm rauf und mit dem Fahrstuhl wieder runter! Jill Enders nennt das Herz in 'Organisch' ein 'Beziehungsorgan', das auf jeden Blick und jedes Gefühl reagiert. Es pumpt nicht nur stumpf Blut, es ist über Nervenbahnen direkt mit deinem emotionalen Zentrum verbunden. Deine Herzleistung ist also auch ein Maß für all die Leidenschaft, die du bisher erlebt hast!`;
+                break;
+            case 6:
+                let balloons = ((d * 1440 * 8.5) / 1000) / 3000;
+                res = `${balloons.toFixed(1)} Heißluftballons`;
+                exp = "Deine Lunge ist ein Meister der Oberfläche – ausgebreitet wäre sie so groß wie ein Squash-Feld! Jill Enders beschreibt das Atmen als unsere direkteste Verbindung zur Umwelt. Jeder Atemzug füttert nicht nur deine Zellen, sondern massiert über das Zwerchfell auch sanft deine Bauchorgane. Du bläst also buchstäblich Leben in dein gesamtes inneres Ökosystem!";
+                break;
+            case 7:
+                let kmTot = d * 3.5; let aus = kmTot / 16200;
+                res = `${Math.floor(kmTot).toLocaleString('de-DE')} km (${aus.toFixed(1)} Mal)`;
+                exp = `Du bist bei deiner Wanderung von ${loc} bis Australien schon ${aus.toFixed(1)} Mal angekommen! In 'Organisch' erfahren wir, dass unsere Füße kleine Wunder der Statik sind, die über tausende Nervenenden ständig dein Gehirn informieren. Während du läufst, erledigt dein Körper komplexe Physik, damit du das Gleichgewicht hältst. Deine Beine sind dein persönlicher Express-Dienst durch die Welt!`;
+                break;
+            case 8:
+                res = (d * 0.03).toFixed(1) + " cm";
+                exp = "Über 6 Meter Wildwuchs! Das ist keine bloße Behaarung, sondern ein Zeichen für dein irres Wachstumspotenzial. Giulia Enders zeigt in ihren Büchern, dass Haare und Nägel Spiegel deines Stoffwechsels sind. Geht es deinem Mikrobiom im Darm gut, wird die Hornproduktion perfekt befeuert. Deine Achselhaare wären also, wenn man sie ließe, ein echtes Statussymbol deiner inneren Gesundheit!";
+                break;
+            case 9:
+                let meter = (y * 52 * 0.7) * 0.2;
+                res = `${Math.floor(meter).toLocaleString('de-DE')} Meter`;
+                exp = "Eine gigantische Kette aus Thüringer Gold! Wusstest du, dass die Verdauung schon lange vor dem Magen beginnt? Dein Speichel enthält Enzyme, die die Stärke der Bratwurst sofort analysieren. Giulia Enders erklärt herrlich, dass dein Mundraum wie ein kleiner Zollbeamter arbeitet, der jedes Stück Essen prüft, bevor es die Reise in die Tiefe antreten darf. Guten Appetit im Nachhinein!";
+                break;
+            case 10:
+                res = Math.floor((d * 1.5) / 150) + " Badewannen";
+                exp = "Deine Nieren sind die wahren Chemie-Genies deines Körpers. Sie filtern dein Blut so präzise, dass am Ende nur das 'Abwasser' übrig bleibt, das in die Wanne wandert. Jill Enders betont in 'Organisch', wie wichtig dieser konstante Fluss für deinen Blutdruck ist. Jede volle Wanne ist also ein Beweis dafür, dass deine körpereigene Kläranlage perfekt im 24-Stunden-Betrieb läuft!";
+                break;
+            case 11:
+                res = (d * 0.001).toFixed(1) + " m³";
+                exp = "Das ist ein stattlicher Gasballon! Giulia Enders bricht in 'Darm mit Charme' eine Lanze für das Pupsen: Es ist ein Loblied deiner Bakterien! Wenn sie gesunde Ballaststoffe zerlegen, entstehen diese Gase als Nebenprodukt. Ein Ballon voller Winde ist also eigentlich ein Zertifikat für ein fleißiges und hochaktives Mikrobiom in deinem Unterstübchen!";
+                break;
+            case 12:
+                let jets = (10 * Math.log10((d * 1.2) * 1e10)) / 140;
+                res = `${jets.toFixed(1)} Düsenjets`;
+                exp = "Dein Mammut-Rülps würde ganze Rollfelder erzittern lassen! Rülpsen ist laut Giulia Enders oft nur verschluckte Luft, die den Notausgang nach oben nimmt. Dein Magenpförtner entscheidet blitzschnell, dass dieser Druck raus muss, um Platz für Neues zu schaffen. Du bist also akustisch gesehen ein echtes Kraftwerk, wenn man all deine kleinen Aufstoßer bündelt!";
+                break;
+            case 13:
+                let qm = d / 20; let txt = (qm < 150) ? "Vorgarten" : (qm < 2500 ? "Oase" : "Stadtpark");
+                res = `Eine blühende ${txt}!`;
+                exp = `Mit über 20.000 Litern Speichel hast du eine beachtliche Bewässerungsleistung erbracht. Dein Speichel ist laut 'Organisch' ein echtes Zaubermittel: Er schützt deine Zähne, tötet Keime ab und bereitet den Magen auf das vor, was kommt. Er ist der treue Butler deines Verdauungssystems, der dafür sorgt, dass im Mund alles geschmeidig läuft und nichts vertrocknet!`;
+                break;
+        }
+        return { res, exp };
+    }
+
+    function renderStep(step) {
+        const data = getStepData(step);
+        const questions = ["", 
+            "Nachwuchs: Wie viele neue Erdenbürger sind in [Ort] seit deiner Geburt geschlüpft?",
+            "Sonnenstunden: Wie viele Stunden hat die Sonne seitdem extra für dich Überstunden gemacht?",
+            "Nahrungsaufnahme: Wie viele Rinder ODER Elefanten hast du wohl verspeist? Nimm, was du lieber isst...",
+            "Die neue Haut: Du häutest dich fortlaufend wie eine Schlange. In der wievielten Haut steckst du heute?",
+            "Herz-Kran-Leistung: Wenn dein Herz ein Baukran wäre: Wie viele Meter hoch hätte es ein 1,5t-Auto gehievt?",
+            "Atemluftvolumen: Wie vielen Heißluftballons entspricht die Luft, die du seitdem verarbeitet hast?",
+            "Die ERD-Reise: Wie weit bist du bei deiner Wanderung von [Ort] bis nach Australien gekommen?",
+            "Achselhaar-Urwald: Wie viele Zentimeter Wildwuchs hättest du unter den Achseln (ohne Rasur)?",
+            "Die Bratwurst-Kette: Wie viele Meter lang wäre die Kette aus Thüringer Bratwürsten, die du verputzt hast?",
+            "Badewannen-Pipi: Wie viele Standard-Badewannen hättest du mit deinem Pipi seitdem gefüllt?",
+            "Die Pups-Hülle: Welches Volumen (m³) hätte ein Ballon, wenn man all deine Winde darin gesammelt hätte?",
+            "Das Rülps-Orchester: Wie viele Düsenjets würdest du akustisch übertönen, wenn man alle Rülpser bündelt?",
+            "Die Spucke-Oase: Hättest du mit deinem Speichel eher einen Vorgarten, eine Oase oder einen Stadtpark bewässert?"
+        ];
+
+        document.getElementById('step-0').style.display = 'none';
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+            <div class="quiz-step active">
+                <p style="color: #95a5a6; font-weight: bold; font-size: 13px;">CHECK-PUNKT ${step} VON 13</p>
+                <p style="font-size: 19px; font-weight: 600; margin-bottom: 20px;">${questions[step].replace("[Ort]", userData.loc)}</p>
+                <span class="result-val">${data.res}</span>
+                <div class="explanation">💡 <strong>Heiteres Wissen aus 'Darm mit Charme' & 'Organisch':</strong><br>${data.exp}</div>
+                <div class="btn-stack">
+                    <button class="back" onclick="${step === 1 ? 'location.reload()' : 'renderStep('+(step-1)+')'}">Zurück</button>
+                    <button onclick="${step === 13 ? 'location.reload()' : 'renderStep('+(step+1)+')'}">${step === 13 ? 'Neustart' : 'Weiter'}</button>
+                </div>
+            </div>
+        `;
+    }
+</script>
+</body>
+</html>
