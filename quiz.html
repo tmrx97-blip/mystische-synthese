@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lebens-Check | Web App</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <style>
+        :root { --primary: #2c3e50; --accent: #d35400; --bg: #fdf2e9; --card-bg: #ffffff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background-color: var(--bg); color: var(--primary); margin: 0; display: flex; justify-content: center; padding: env(safe-area-inset-top) 20px; }
+        .container { width: 100%; max-width: 600px; background: var(--card-bg); padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); margin-top: 40px; text-align: center; }
+        h1 { font-size: 26px; color: var(--accent); margin-bottom: 10px; }
+        .input-group { margin: 20px 0; text-align: left; }
+        label { font-weight: bold; font-size: 14px; margin-left: 5px; }
+        input, select { width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 15px; font-size: 17px; margin-top: 5px; box-sizing: border-box; -webkit-appearance: none; }
+        .btn-stack { display: flex; gap: 10px; margin-top: 25px; }
+        button { flex: 2; background: var(--accent); color: white; border: none; padding: 18px; font-size: 18px; font-weight: bold; border-radius: 15px; cursor: pointer; transition: 0.1s; }
+        button.back { flex: 1; background: #bdc3c7; }
+        button:active { transform: scale(0.98); opacity: 0.9; }
+        .result-val { font-size: 32px; font-weight: 900; color: var(--accent); display: block; margin: 15px 0; line-height: 1.2; }
+        .explanation { background: #fef9f5; padding: 20px; border-left: 5px solid var(--accent); border-radius: 12px; text-align: left; font-size: 15px; line-height: 1.5; color: #555; }
+        .quiz-step { display: none; }
+        .quiz-step.active { display: block; animation: slide 0.4s ease-out; }
+        @keyframes slide { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="step-0" class="quiz-step active">
+        <h1>Dein Lebens-Check</h1>
+        <p>Präzise Daten & heitere Fakten<br><small>(Inspiriert von Giulia & Jill Enders)</small></p>
+        <div class="input-group">
+            <label>Wann ging die Reise los?</label>
+            <input type="date" id="birthdate" value="1970-01-01">
+        </div>
+        <div class="input-group">
+            <label>Und wo?</label>
+            <select id="location">
+                <option value="Jena">Jena</option>
+                <option value="Erfurt">Erfurt</option>
+                <option value="Gera">Gera</option>
+                <option value="Brotterode">Brotterode</option>
+            </select>
+        </div>
+        <button onclick="startQuiz()">Quiz starten</button>
+    </div>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    let userData = { days: 0, years: 0, loc: '', date: null };
+    const birthDb = {
+        Jena: { p1: 1700, p2: 650, p3: 1350 },
+        Erfurt: { p1: 2800, p2: 1100, p3: 2100 },
+        Gera: { p1: 1600, p2: 450, p3: 850 },
+        Brotterode: { p1: 75, p2: 25, p3: 45 }
+    };
+
+    function startQuiz() {
+        const bInput = document.getElementById('birthdate').value;
+        const bdate = new Date(bInput);
+        userData.days = Math.floor((new Date() - bdate) / (1000 * 60 * 60 * 24));
+        userData.years = userData.days / 365.2425;
+        userData.loc = document.getElementById('location').value;
+        userData.date = bdate;
+        renderStep(1);
+    }
+
+    function getStepData(step) {
+        const d = userData.days; const y = userData.years; const loc = userData.loc;
+        let res = "", exp = "";
+
+        switch(step) {
+            case 1:
+                let total = 0; let sY = userData.date.getFullYear();
+                for(let i=sY; i<=2026; i++) {
+                    let db = birthDb[loc];
+                    total += (i<1990) ? db.p1 : (i<2000 ? db.p2 : db.p3);
+                }
+                res = Math.floor(total).toLocaleString('de-DE') + " Babys";
+                exp = `Vergiss die 411! In ${loc} wurde seit deiner Geburt richtig geschuftet. Wusstest du: Dein Darm ist bei der Geburt fast steril und wird erst durch die Außenwelt mit Billionen Bakterien besiedelt – dein ganz eigenes Ökosystem entsteht!`;
+                break;
+            case 2:
+                res = Math.floor(y * 1650).toLocaleString('de-DE') + " Stunden";
+                exp = "Die Sonne liefert dir Vitamin D für deine 'Knochenfabrik'. Giulia Enders erklärt: Unser Darm liebt Entspannung im Hellen, denn Stress lässt die Darmbarriere löchrig werden – die Sonne ist also Balsam für dein Inneres!";
+                break;
+            case 3:
+                let rTotal = (y * 60) / 250; let eTotal = (d * 0.968) / 5000;
+                res = `${rTotal.toFixed(1)} Rinder ODER ${eTotal.toFixed(1)} Elefanten`;
+                exp = `Und stell dir jetzt bitte nicht vor, wie der Elefant wieder rauskommt... Ein Elefant wiegt 5 Tonnen, und du hast locker vier davon verputzt! Jill Enders schreibt: Unser Darm bewältigt im Leben über 30 Tonnen Nahrung – das ist Schwerstarbeit für die Zotten!`;
+                break;
+            case 4:
+                res = Math.floor(d / 28).toLocaleString('de-DE') + ". Haut";
+                exp = "Du bist alle 28 Tage brandneu! Deine Haut spiegelt oft deinen Darm wider. In 'Darm mit Charme' lernen wir: Wer gute Bakterien füttert, bekommt den 'Glow', weil weniger Giftstoffe über die Haut raus müssen.";
+                break;
+            case 5:
+                let workJ = d * 131000; let hM = workJ / (1500 * 9.81); let eiffel = hM / 330;
+                res = `${Math.floor(hM).toLocaleString('de-DE')} Meter`;
+                exp = `Das wären ca. ${eiffel.toFixed(1)} Mal den Eiffelturm rauf und mit dem Fahrstuhl wieder runter! Jill Enders nennt das Herz ein 'Beziehungsorgan', das eng mit dem 'Bauchgehirn' korrespondiert. Ein echtes Kraftpaket!`;
+                break;
+            case 6:
+                let volM3 = (d * 1440 * 8.5) / 1000; let balloons = volM3 / 3000;
+                res = `${balloons.toFixed(1)} Heißluftballons`;
+                exp = "Deine Lunge ist ein riesiger Filter. Wusstest du, dass tiefes Atmen den Vagusnerv stimuliert? Das gibt deinem Darm das Signal: 'Alles sicher, wir können in Ruhe verdauen!'";
+                break;
+            case 7:
+                let kmTot = d * 3.5; let aus = kmTot / 16200;
+                res = `${Math.floor(kmTot).toLocaleString('de-DE')} km`;
+                exp = `Du hättest die Strecke von ${loc} bis Australien schon ${aus.toFixed(1)} Mal geschafft! Jill Enders erinnert uns: Unsere Füße tragen uns überall hin, während unser Darm im Sitzen (Hocke!) am besten arbeitet.`;
+                break;
+            case 8:
+                res = (d * 0.03).toFixed(1) + " cm";
+                exp = "Über 6 Meter Wildwuchs! Das klingt viel, aber es zeigt nur dein irres Wachstumspotenzial. Haare und Nägel sind Anhängsel des Stoffwechsels – geht's dem Bauch gut, glänzt die Pracht!";
+                break;
+            case 9:
+                let m = (y * 52 * 0.7) * 0.2;
+                res = `${Math.floor(m).toLocaleString('de-DE')} Meter`;
+                exp = "Eine gigantische Kette aus Thüringer Gold! Giulia Enders erklärt herrlich: Die Verdauung fängt schon beim Kauen an. Speichel ist das erste 'Desinfektionsmittel' für deine Bratwurst.";
+                break;
+            case 10:
+                res = Math.floor((d * 1.5) / 150) + " Badewannen";
+                exp = "Pipi ist eigentlich nur doppelt und dreifach gefiltertes Blutwasser. Deine Nieren sind die Chemie-Genies, die entscheiden, was im Körper bleiben darf und was in die Wanne wandert.";
+                break;
+            case 11:
+                res = (d * 0.001).toFixed(1) + " m³";
+                exp = "Ein prächtiger Gasballon! In 'Darm mit Charme' lernen wir: Pupsen ist ein Kompliment an deine Bakterien – sie haben gerade erfolgreich Ballaststoffe zerlegt. Ein Hoch auf die Winde!";
+                break;
+            case 12:
+                let jets = (10 * Math.log10((d * 1.2) * 1e10)) / 140;
+                res = `${jets.toFixed(1)} Düsenjets`;
+                exp = "Dein Mammut-Rülps würde Rollfelder erzittern lassen! Rülpsen ist laut Giulia Enders nur 'verschluckte Luft', die den Notausgang nach oben nimmt, weil der Magenpförtner gerade Pause macht.";
+                break;
+            case 13:
+                let qm = d / 20; let txt = (qm < 150) ? "Vorgarten" : (qm < 2500 ? "Oase" : "Stadtpark");
+                res = `Eine blühende ${txt}!`;
+                exp = `Mit über 20.000 Litern Speichel hast du ordentlich bewässert. Speichel ist die 'Schutzpolizei' für deinen Mundraum und der treue Butler deines Magens. Ohne ihn wäre alles ziemlich trocken!`;
+                break;
+        }
+        return { res, exp };
+    }
+
+    function renderStep(step) {
+        const data = getStepData(step);
+        const questions = ["", 
+            "Wie viele neue Erdenbürger sind in [Ort] seit deiner Geburt geschlüpft?",
+            "Wie viele Sonnenstunden hat die Sonne seitdem extra für dich Überstunden gemacht?",
+            "Wie viele Rinder ODER Elefanten hast du wohl verspeist? Nimm, was du lieber isst...",
+            "Du häutest dich fortlaufend wie eine Schlange. In der wievielten Haut steckst du heute?",
+            "Wenn dein Herz ein Baukran wäre: Wie viele Meter hoch hätte es einen 1,5-Tonnen-Wagen gehievt?",
+            "Wie vielen Heißluftballons entspricht die Luft, die du seitdem in die Welt geblasen hast?",
+            "Wie weit bist du bei deiner Wanderung gekommen? (Vergleich: Thüringen nach Australien)",
+            "Wie viele Zentimeter Wildwuchs hättest du unter den Achseln, wenn du nie rasiert hättest?",
+            "Wie viele Meter lang wäre die Kette aus Thüringer Bratwürsten, die du allein verputzt hast?",
+            "Wie viele Standard-Badewannen hättest du mit deinem Pipi seitdem gefüllt?",
+            "Wie viel Volumen (m³) hätte ein Ballon, wenn man all deine Winde darin gesammelt hätte?",
+            "Wie viele Düsenjets würdest du lautstärkemäßig übertönen, wenn man all deine Rülpser bündelt?",
+            "Hättest du mit deinem Speichel eher einen Vorgarten, eine Oase oder einen Stadtpark bewässert?"
+        ];
+
+        document.getElementById('step-0').style.display = 'none';
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+            <div class="quiz-step active">
+                <p><strong>Check-Punkt ${step} von 13</strong></p>
+                <p style="font-size: 18px; font-weight: 500;">${questions[step].replace("[Ort]", userData.loc)}</p>
+                <span class="result-val">${data.res}</span>
+                <div class="explanation">💡 <strong>Hättest du's gewusst?</strong><br>${data.exp}</div>
+                <div class="btn-stack">
+                    <button class="back" onclick="${step === 1 ? 'location.reload()' : 'renderStep('+(step-1)+')'}">Zurück</button>
+                    <button onclick="${step === 13 ? 'location.reload()' : 'renderStep('+(step+1)+')'}">${step === 13 ? 'Neustart' : 'Weiter'}</button>
+                </div>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
