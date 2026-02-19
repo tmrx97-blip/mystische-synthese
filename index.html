@@ -9,475 +9,212 @@
 <meta name="apple-mobile-web-app-title" content="Lebenszeit">
 <meta name="theme-color" content="#0b1a23">
 <title>Lebenszeit-Quiz</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%23152a35' width='180' height='180' rx='40'/%3E%3Ctext x='90' y='118' text-anchor='middle' font-size='100'%3E%E2%8F%B3%3C/text%3E%3C/svg%3E">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:-apple-system,system-ui,'Helvetica Neue',sans-serif;
-  background:linear-gradient(160deg,#0b1a23,#132d3b 40%,#1a3a4a);
-  min-height:100vh;min-height:100dvh;
-  color:#e8f0f4;
-  padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(32px + env(safe-area-inset-bottom,0px));
-  overflow-x:hidden
-}
+body{font-family:-apple-system,system-ui,'Helvetica Neue',sans-serif;background:linear-gradient(160deg,#0b1a23,#132d3b 40%,#1a3a4a);min-height:100vh;min-height:100dvh;color:#e8f0f4;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(32px + env(safe-area-inset-bottom,0px));overflow-x:hidden}
 .c{max-width:480px;margin:0 auto}
 .hide{display:none!important}
-
-/* Start */
 .logo{text-align:center;margin-bottom:32px}
 .logo .ic{font-size:56px;display:block;margin-bottom:8px}
 .logo h1{font-size:32px;font-weight:300;letter-spacing:-.5px;margin-bottom:4px}
 .logo p{font-size:13px;color:rgba(255,255,255,.45);font-style:italic}
-
 .irow{display:flex;gap:10px;margin-bottom:14px}
 .ig{flex:1}.ig.n{flex:.75}
 .ig label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.5);margin-bottom:6px}
-.sel,.inp{
-width:100%;padding:13px;border-radius:12px;
-border:1px solid rgba(255,255,255,.1);
-background:rgba(255,255,255,.06);
-color:#e8f0f4;font-size:16px;outline:none;
--webkit-appearance:none;appearance:none
-}
-.sel option{background:#132d3b;color:#e8f0f4}
+.sel{width:100%;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#e8f0f4;font-size:16px;outline:none}
+.inp{width:100%;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#e8f0f4;font-size:16px;outline:none;-webkit-appearance:none}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
-
-.btn{
-width:100%;padding:16px;border-radius:14px;border:none;
-background:linear-gradient(135deg,#00b4d8,#0077b6);
-color:#fff;font-size:17px;font-weight:700;
-cursor:pointer;box-shadow:0 4px 24px rgba(0,180,216,.3);
--webkit-appearance:none
-}
+.btn{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#00b4d8,#0077b6);color:#fff;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(0,180,216,.3)}
 .btn:active{opacity:.85;transform:scale(.98)}
 .err{text-align:center;color:#ff6b6b;font-size:14px;margin-top:14px}
-
-/* Quiz */
 .pb{background:rgba(255,255,255,.06);border-radius:8px;height:6px;margin-bottom:20px;overflow:hidden}
 .pf{height:100%;border-radius:8px;background:linear-gradient(90deg,#00b4d8,#48cae4);transition:width .5s}
 .sc{text-align:center;font-size:11px;color:rgba(255,255,255,.35);margin-bottom:16px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
-
-.card{border-radius:20px;padding:24px 20px;border:1px solid rgba(255,255,255,.08);margin-bottom:20px}
+.card{border-radius:20px;padding:24px 20px;border:1px solid rgba(255,255,255,.08)}
 .card .em{font-size:44px;margin-bottom:14px;display:block}
 .card .qq{font-size:22px;font-weight:300;line-height:1.45;color:rgba(255,255,255,.88);margin-bottom:18px}
 .hb{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:13px 15px;margin-bottom:20px}
 .hl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);margin-bottom:6px}
 .ht{font-size:13px;color:rgba(255,255,255,.55);line-height:1.65;font-style:italic}
-
-.btnr{
-width:100%;padding:15px;border-radius:14px;border:none;
-background:linear-gradient(135deg,#00b4d8,#0077b6);
-color:#fff;font-size:16px;font-weight:700;
-cursor:pointer;box-shadow:0 4px 20px rgba(0,180,216,.25);
--webkit-appearance:none
-}
+.btnr{width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#00b4d8,#0077b6);color:#fff;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,180,216,.25)}
 .btnr:active{opacity:.85;transform:scale(.98)}
-
 .rv{font-size:34px;font-weight:300;letter-spacing:-.5px;margin:22px 0 6px;line-height:1.15}
 .rs{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:6px}
-.ex{
-background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-border-radius:12px;padding:15px 16px;
-font-size:13.5px;color:rgba(255,255,255,.58);line-height:1.75;margin-top:18px
-}
-.btnn{
-width:100%;padding:14px;border-radius:14px;
-border:1px solid rgba(255,255,255,.12);
-background:rgba(255,255,255,.06);
-color:#e8f0f4;font-size:15px;font-weight:700;
-cursor:pointer;margin-top:18px;-webkit-appearance:none
-}
+.ex{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:15px 16px;font-size:13.5px;color:rgba(255,255,255,.58);line-height:1.75;margin-top:18px}
+.btnn{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#e8f0f4;font-size:15px;font-weight:700;cursor:pointer;margin-top:18px}
 .btnn:active{background:rgba(255,255,255,.12)}
-
 .obar{background:rgba(255,255,255,.06);border-radius:6px;height:10px;margin:12px 0 10px;overflow:hidden}
 .ofill{height:100%;border-radius:6px;background:linear-gradient(90deg,#40916c,#52b788)}
 .sbox{padding:11px 14px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid rgba(82,183,136,.12);margin-bottom:8px}
 .snm{color:#74c69d;font-size:15px;font-weight:700}
 .sdt{color:rgba(255,255,255,.32);font-size:11px;margin-top:3px}
-
 .end{text-align:center;padding-top:40px}
 .end .ei{font-size:60px;display:block;margin-bottom:18px}
 .end h2{font-size:28px;font-weight:300;margin-bottom:10px}
 .end p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:28px;padding:0 8px}
 </style>
-
 </head>
 <body>
 <div class="c">
-
 <div id="S1">
-  <div class="logo">
-    <span class="ic">&#9203;</span>
-    <h1>Dein Lebenszeit-Quiz</h1>
-    <p>10 Fragen, die dich garantiert &#252;berraschen</p>
-  </div>
-  <div class="irow">
-    <div class="ig n"><label>Tag</label><select id="dd" class="sel"></select></div>
-    <div class="ig"><label>Monat</label><select id="mm" class="sel"></select></div>
-    <div class="ig"><label>Jahr</label><input type="number" id="yy" class="inp" placeholder="1960" inputmode="numeric"></div>
-  </div>
-  <button class="btn" id="goBtn">Quiz starten &#128640;</button>
-  <div id="err" class="err hide"></div>
+<div class="logo"><span class="ic">&#9203;</span><h1>Dein Lebenszeit-Quiz</h1><p>10 Fragen, die dich garantiert &uuml;berraschen</p></div>
+<div class="irow">
+<div class="ig n"><label>Tag</label>
+<select id="dd" class="sel">
+<option value="">&#8212;</option>
+<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+<option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+<option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
+<option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+<option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
+<option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+<option>31</option>
+</select></div>
+<div class="ig"><label>Monat</label>
+<select id="mm" class="sel">
+<option value="">&#8212;</option>
+<option value="1">Jan</option><option value="2">Feb</option><option value="3">M&auml;r</option>
+<option value="4">Apr</option><option value="5">Mai</option><option value="6">Jun</option>
+<option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+<option value="10">Okt</option><option value="11">Nov</option><option value="12">Dez</option>
+</select></div>
+<div class="ig"><label>Jahr</label><input type="number" id="yy" class="inp" placeholder="1960" inputmode="numeric"></div>
+</div>
+<button class="btn" id="goBtn">Quiz starten &#128640;</button>
+<div id="err" class="err hide"></div>
 </div>
 
 <div id="S2" class="hide">
-  <div class="pb"><div class="pf" id="pf"></div></div>
-  <div class="sc" id="sc"></div>
-  <div id="cc"></div>
+<div class="pb"><div class="pf" id="pf"></div></div>
+<div class="sc" id="sc"></div>
+<div id="cc"></div>
 </div>
 
 <div id="S3" class="hide end">
-  <span class="ei">&#129346;</span>
-  <h2>Auf dich und dein fantastisches Leben!</h2>
-  <p id="et"></p>
-  <button class="btn" id="reBtn">Nochmal spielen</button>
+<span class="ei">&#129346;</span>
+<h2>Auf dich und dein fantastisches Leben!</h2>
+<p id="et"></p>
+<button class="btn" id="reBtn">Nochmal spielen</button>
+</div>
 </div>
 
-</div>
 <script>
-// === KONSTANTEN ===
-var OAK = 830;
-var LIFE = 86;
-var HRATE = 70;
-var LUNAR = 29.53;
-var TEARS_Y = 0.8;
-var BREATH = 15;
-var ROTKM = 40075.017 * Math.cos(50 * Math.PI / 180);
-var HAIR_Y = 10;
+var OAK=830,LIFE=86,HR=70,LUN=29.53,TEA=0.8,BR=15,RKM=40075.017*Math.cos(50*Math.PI/180);
+function fmt(n){return n.toLocaleString("de-DE")}
+function fD(n,d){return n.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d})}
+function nl(s){return s.replace(/\n/g,"<br>")}
+function oS(a){if(a<15)return"Ein zarter Keimling";if(a<50)return"Ein junger Setzling";if(a<120)return"Ein aufstrebender Jungbaum";if(a<250)return"Eine kraeftige junge Eiche";if(a<400)return"Ein stattlicher Baum";if(a<600)return"Eine maechtige alte Eiche";if(a<750)return"Ein ehrwuerdiger Baumveteran";return"Eine uralte legendaere Eiche"}
 
-// === DROPDOWN SETUP ===
-var ddEl = document.getElementById(“dd”);
-var mmEl = document.getElementById(“mm”);
-var yyEl = document.getElementById(“yy”);
-var mNames = [“Jan”,“Feb”,“M\u00e4r”,“Apr”,“Mai”,“Jun”,“Jul”,“Aug”,“Sep”,“Okt”,“Nov”,“Dez”];
+function buildQ(d,m,y){
+var b=new Date(y,m-1,d),now=new Date(),ms=now-b;
+var days=Math.round(ms/864e5),yrs=ms/(365.25*864e5),mins=ms/6e4,ratio=yrs/LIFE;
+var weeks=Math.round(days/7),heart=Math.round(mins*HR),hM=heart/1e6;
+var moons=Math.floor(days/LUN),tears=yrs*TEA,rot=days*RKM;
+var remD=Math.max(0,Math.round((LIFE-yrs)*365.25)),remB=remD*24*60*BR;
+var oA=OAK*ratio,oY=Math.floor(oA),oMo=Math.round((oA-oY)*12);
+var slp=yrs/3,meals=days*3,hair=yrs*10,age=Math.floor(yrs);
+var bS=d+"."+m+"."+y,pct=Math.min(100,ratio*100),r=[];
 
-function mkOpt(parent, v, t) {
-var o = document.createElement(“option”);
-o.value = v; o.textContent = t;
-parent.appendChild(o);
+r.push({bg:"#0e2a35",em:"\uD83D\uDCC5",qq:"Montag, Dienstag, Mittwoch ... und das Ganze wieder von vorn. Wie viele komplette Wochen drehst du dich schon in diesem Hamsterrad?",hi:"Du bist am "+bS+" auf die Welt gekommen. Seitdem hat sich das Wochenkarussell unerm\u00fcdlich gedreht \u2013 durch Schulzeit, Berufsleben, Urlaube und jede Menge Montage, an denen der Wecker zu fr\u00fch klingelte.",val:"~"+fmt(weeks)+" Wochen",vc:"#90e0ef",sub:fmt(days)+" Tage, rund "+age+" Jahre",ex:fmt(weeks)+" Wochen! Davon rund "+fmt(Math.round(weeks*5/7))+" Werktage und "+fmt(Math.round(weeks*2/7))+" Wochenendtage. H\u00e4ttest du jeden Montag laut gest\u00f6hnt, w\u00e4ren das "+fmt(weeks)+" Seufzer \u2013 genug f\u00fcr einen eigenen Podcast.\n\nZum Vergleich: Die Chinesische Mauer wurde in rund 100.000 Wochen erbaut. Jede deiner "+fmt(weeks)+" Wochen war einmalig \u2013 keine l\u00e4sst sich zur\u00fcckspulen.",extra:""});
+
+r.push({bg:"#1a1525",em:"\u2764\uFE0F",qq:"Dein Herz kennt weder Wochenende noch Feiertag. Es schl\u00e4gt und schl\u00e4gt und schl\u00e4gt. Wie viele Millionen Schl\u00e4ge hat es zusammengetrommelt?",hi:"Ein Herz schl\u00e4gt in Ruhe etwa 70 Mal pro Minute. Im Schlaf sackt es auf 50, beim Treppensteigen jagt es auf 140 hoch. Die 70 pro Minute sind ein solider Durchschnitt.",val:"~"+fD(hM,1)+" Millionen",vc:"#f48fb1",sub:"Herzschl\u00e4ge bei 70 Schl\u00e4gen pro Minute",ex:fD(hM,1)+" Millionen Herzschl\u00e4ge \u2013 und dein Herz hat nicht einmal eine Gehaltserh\u00f6hung verlangt. Kein Krankenstand, kein Streik, nicht mal eine Kaffeepause.\n\nPro Tag sind das "+fmt(Math.round(HR*1440))+" Schl\u00e4ge. Hochgerechnet hat es rund "+fmt(Math.round(heart*0.07/1000))+" Tonnen Blut bewegt \u2013 das f\u00fcllt "+Math.round(heart*0.00007/2.5)+" Tanklaster.",extra:""});
+
+r.push({bg:"#121828",em:"\uD83C\uDF15",qq:"Er war schon da, als es noch keine Stra\u00dfenlaternen gab. Wie viele Vollmonde sind seit deiner Geburt \u00fcber den Nachthimmel gezogen?",hi:"Der Mond braucht "+fD(LUN,2)+" Tage f\u00fcr einen Zyklus. 12 bis 13 Vollmonde pro Jahr. Manchmal zwei in einem Monat \u2013 der ber\u00fchmte 'Blue Moon'.",val:fmt(moons)+" Vollmonde",vc:"#9fa8da",sub:"bei "+fD(LUN,2)+" Tagen pro Mondzyklus",ex:fmt(moons)+" Vollmonde! Vermutlich hast du 95% davon verpasst \u2013 geschlafen, ferngesehen oder nicht hochgeschaut.\n\nRund "+Math.round(moons*0.04)+" davon waren Supermonde, bei denen er 14% gr\u00f6\u00dfer wirkt. Tipp: Beim n\u00e4chsten einfach rausgehen und Kopf in den Nacken.",extra:""});
+
+r.push({bg:"#0e2228",em:"\uD83D\uDCA7",qq:"Wie viele Eimer voll Tr\u00e4nen haben deine Augen seit der Geburt produziert? Spoiler: Mit Heulen hat das fast nichts zu tun!",hi:"Die meisten Tr\u00e4nen sind Basaltr\u00e4nen \u2013 ein permanenter Film, der das Auge feucht h\u00e4lt. Dazu Reflextr\u00e4nen (Zwiebeln! Wind!) und emotionale Tr\u00e4nen. Zusammen ca. 0,8 Liter pro Jahr.",val:"~"+fD(tears,1)+" Liter",vc:"#4dd0e1",sub:fD(tears/10,1)+" Eimer \u00e0 10 Liter",ex:fD(tears,1)+" Liter! Das f\u00fcllt "+Math.round(tears/0.2)+" Weingl\u00e4ser \u2013 wobei man das geschmacklich lassen sollte.\n\n98% sind Basaltr\u00e4nen, die leise arbeiten. Emotionale Tr\u00e4nen enthalten Stresshormone und nat\u00fcrliche Schmerzmittel. Weinen ist keine Schw\u00e4che, sondern clevere Entgiftung.",extra:""});
+
+r.push({bg:"#1a1a10",em:"\uD83C\uDF0D",qq:"Du sitzt gem\u00fctlich im Sessel und denkst, du bewegst dich nicht? Pustekuchen! Wie viele Millionen Kilometer hat dich die Erdrotation durch den Weltraum geschleudert?",hi:"Auf 50\u00b0 N (Frankfurt\u2013Prag) legt man "+fmt(Math.round(RKM))+" km pro Tag zur\u00fcck \u2013 rund "+fmt(Math.round(RKM/24))+" km/h. Schneller als jeder Porsche.",val:"~"+fD(rot/1e6,1)+" Mio. km",vc:"#ffcc80",sub:"auf 50\u00b0 N, ca. "+fmt(Math.round(RKM/24))+" km/h",ex:fD(rot/1e6,1)+" Millionen Kilometer \u2013 ohne einen Liter Benzin! Du bist "+fmt(Math.round(rot/384400))+" Mal zum Mond und zur\u00fcck gereist. Gratis, ohne Stau.\n\nEin Marathonl\u00e4ufer br\u00e4uchte "+fmt(Math.round(rot/42/365))+" Jahre f\u00fcr dieselbe Strecke. Im Sitzen geschafft!",extra:""});
+
+var exD;
+if(remD>0){exD=fmt(remD)+" Tage \u2013 das sind noch "+fmt(remB)+" Atemz\u00fcge bis zum theoretischen Ausstieg. Das ist jede Menge Luft! Also keine Panik, leg am besten gleich los.\n\nDu wirst noch rund "+fmt(remD*3)+" Mahlzeiten genie\u00dfen, "+fmt(Math.round(remD/7))+" Wochenenden erleben und k\u00f6nntest "+Math.round(remD*8/500)+" B\u00fccher lesen. Die Frage ist nicht ob genug Zeit bleibt \u2013 sondern wof\u00fcr.";}
+else{exD="Du hast die 86 \u00fcberschritten \u2013 Chapeau! Jeder weitere Tag ist Bonuszeit.\n\nJeanne Calment wurde 122 \u2013 da geht also noch einiges. Genie\u00df jeden Tag!";}
+
+r.push({bg:"#1a1508",em:"\u23F3",qq:"Mal angenommen, du wirst genau 86 Jahre alt \u2013 wie viele Tage stehen dann ab heute noch auf deinem Lebenskonto?",hi:"Die durchschnittliche Lebenserwartung liegt bei 86 Jahren \u2013 insgesamt "+fmt(Math.round(86*365.25))+" Tage. Klingt viel, aber ein ganzer Teil ist schon weg.",val:remD>0?fmt(remD)+" Tage":"Ziel erreicht! \uD83C\uDF89",vc:"#ffb74d",sub:remD>0?"ca. "+fmt(Math.floor(remD/365))+" Jahre und "+Math.round((remD%365)/30)+" Monate":"Bonuszeit!",ex:exD,extra:""});
+
+var oE="Als Deutsche Eiche w\u00e4rst du "+fmt(oY)+" Jahre alt \u2013 "+oS(oA).toLowerCase()+". ";
+if(oA<250){oE+="Du h\u00e4ttest noch Jahrhunderte f\u00fcr dicke Rinde.";}else{oE+="Schon imposant!";}
+oE+="\n\nDie Femeiche in Raesfeld-Erle ist 600\u2013850 Jahre alt. Als sie keimte, regierte Kaiser Karl IV. ";
+if(oY>400){oE+="Fast genauso ehrw\u00fcrdig!";}else if(oY>200){oE+="Auf dem besten Weg!";}else{oE+="Noch ein Jungspund \u2013 aber erstklassiges Holz!";}
+
+r.push({bg:"#0a1a12",em:"\uD83C\uDF33",qq:"Die Deutsche Eiche wird 830 Jahre alt und hat K\u00f6nige, Kriege und Klimawandel \u00fcberlebt. Wenn du eine w\u00e4rst \u2013 knorriger Riese oder d\u00fcnnes St\u00f6ckchen?",hi:"Eine Deutsche Eiche w\u00e4chst langsam, aber ausdauernd. Erst mit 60\u201380 Jahren wird sie stattlich. Dein Lebensanteil wird proportional auf 830 Eichen-Jahre \u00fcbertragen.",val:fmt(oY)+" Jahre, "+oMo+" Monate",vc:"#52b788",sub:oS(oA),ex:oE,extra:"oak",oakPct:pct,oakY:oY,oakAge:oA});
+
+var sE=fD(slp,1)+" Jahre geschlafen! ";
+if(slp>20){sE+="Mehr als manche Ehe gehalten hat";}else{sE+="Beachtlich";}
+sE+=" \u2013 und definitiv mehr als du je vor dem Fernseher verbracht hast.\n\nIn dieser Zeit hast du rund "+fmt(Math.round(days*5))+" Tr\u00e4ume gehabt. Ohne Schlaf halluziniert das Gehirn nach drei Tagen. Schlaf ist kein Luxus \u2013 er ist Wartung.";
+
+r.push({bg:"#12122a",em:"\uD83D\uDE34",qq:"Du h\u00e4ltst dich f\u00fcr aktiv? Dann halt dich fest: Einen erschreckend gro\u00dfen Teil deines Lebens hast du mit geschlossenen Augen und offenem Mund im Bett verbracht. Wie viele Jahre?",hi:"Ein Mensch schl\u00e4ft im Schnitt 8 Stunden pro Nacht \u2013 exakt ein Drittel. Babys 16 Stunden, Teenager gef\u00fchlt 20.",val:"~"+fD(slp,1)+" Jahre",vc:"#818cf8",sub:"bei 8 Stunden Schlaf pro Nacht",ex:sE,extra:""});
+
+var mE=fmt(meals)+" Mahlzeiten! Bei je 20 Minuten w\u00e4ren das "+fD(meals*20/60/24/365.25,1)+" Jahre nur mit Essen.\n\nW\u00e4ren das alles Schnitzel (200g), h\u00e4ttest du "+fD(meals*0.2/1000,1)+" Tonnen vertilgt \u2013 "+Math.round(meals*0.2/1000/1.5)+" K\u00fche. Guten Appetit \u2013 ";
+if(remD>0){mE+="noch "+fmt(remD*3)+" stehen auf dem Programm!";}else{mE+="es ist nicht die letzte!";}
+
+r.push({bg:"#1a1508",em:"\uD83C\uDF7D\uFE0F",qq:"Fr\u00fchst\u00fcck, Mittag, Abendbrot \u2013 und das St\u00fcck Kuchen, das offiziell 'nicht z\u00e4hlt'. Wie viele Mahlzeiten hast du verdr\u00fcckt?",hi:"Drei Hauptmahlzeiten am Tag \u2013 Kaffee und Kuchen nicht mitgez\u00e4hlt. Auch nicht die Gummib\u00e4rchen abends.",val:"~"+fmt(meals),vc:"#fbbf72",sub:fD(meals/1e6,2)+" Millionen Mal Messer und Gabel",ex:mE,extra:""});
+
+var hE=fmt(Math.round(hair))+" Kilometer Haar! "+fmt(Math.round(hair/42))+" Marathonstrecken \u2013 Laufen darauf w\u00e4re schwierig.\n\n";
+if(hair>800){hE+="Dein Haarfaden reicht bis Rom.";}else if(hair>500){hE+="Dein Haarfaden reicht bis Paris.";}else{hE+="Ein stattlicher Haarfaden!";}
+hE+=" Selbst wenn oben die Lichtungen gr\u00f6\u00dfer werden \u2013 die Seiten produzieren unbeirrt weiter.";
+
+r.push({bg:"#101a10",em:"\uD83D\uDC87",qq:"Dein Kopf ist eine kleine Haarfabrik, rund um die Uhr. Wenn du alle Haare aneinanderlegen w\u00fcrdest \u2013 wie weit k\u00e4mst du?",hi:"100.000 Haare auf dem Kopf, jedes ca. 1 cm pro Monat. 85% wachsen gleichzeitig. Zusammen: 10 Kilometer pro Jahr. Ja \u2013 Kilometer!",val:"~"+fmt(Math.round(hair))+" km",vc:"#a8d886",sub:"Gesamtl\u00e4nge aller Haare",ex:hE,extra:""});
+
+return r;
 }
 
-mkOpt(ddEl, “”, “\u2014”);
-for (var i = 1; i <= 31; i++) mkOpt(ddEl, i, i);
-mkOpt(mmEl, “”, “\u2014”);
-for (var i = 0; i < 12; i++) mkOpt(mmEl, i + 1, mNames[i]);
+var Q=[],S=0;
+document.getElementById("goBtn").addEventListener("click",function(){
+var d=parseInt(document.getElementById("dd").value);
+var m=parseInt(document.getElementById("mm").value);
+var y=parseInt(document.getElementById("yy").value);
+var e=document.getElementById("err");
+if(!d||!m||!y||y<1900||y>2026){e.textContent="Bitte gib ein g\u00fcltiges Datum ein.";e.className="err";return;}
+var b=new Date(y,m-1,d);
+if(b.getMonth()!==m-1||b.getDate()!==d){e.textContent="Dieses Datum existiert nicht.";e.className="err";return;}
+if(new Date()-b<0){e.textContent="Zeitreisende bitte warten!";e.className="err";return;}
+e.className="err hide";Q=buildQ(d,m,y);S=0;
+document.getElementById("S1").className="hide";
+document.getElementById("S2").className="";
+show();
+});
 
-function updDays() {
-var m = parseInt(mmEl.value), y = parseInt(yyEl.value);
-var mx = (m && y) ? new Date(y, m, 0).getDate() : 31;
-var cur = ddEl.value;
-ddEl.innerHTML = “”;
-mkOpt(ddEl, “”, “\u2014”);
-for (var j = 1; j <= mx; j++) mkOpt(ddEl, j, j);
-if (cur && parseInt(cur) <= mx) ddEl.value = cur;
+function show(){
+var t=Q.length,it=Q[S];
+document.getElementById("pf").style.width=(S/t*100)+"%";
+document.getElementById("sc").textContent="Frage "+(S+1)+" von "+t;
+var h='<div class="card" style="background:'+it.bg+'">';
+h+='<span class="em">'+it.em+'</span>';
+h+='<div class="qq">'+it.qq+'</div>';
+h+='<div class="hb"><div class="hl">\uD83D\uDCA1 Wusstest du?</div><div class="ht">'+it.hi+'</div></div>';
+h+='<button class="btnr" id="rb">Antwort aufdecken</button>';
+h+='<div id="ad" class="hide">';
+h+='<div class="rv" style="color:'+it.vc+'">'+it.val+'</div>';
+h+='<div class="rs">'+it.sub+'</div>';
+if(it.extra==="oak"){
+h+='<div class="obar"><div class="ofill" style="width:'+it.oakPct+'%"></div></div>';
+h+='<div class="sbox"><div class="snm">'+oS(it.oakAge)+'</div>';
+h+='<div class="sdt">'+fmt(it.oakY)+' von '+fmt(OAK)+' Jahren</div></div>';
 }
-mmEl.onchange = updDays;
-yyEl.oninput = updDays;
-
-// === HELFER ===
-function fmt(n) { return n.toLocaleString(“de-DE”); }
-function fD(n, d) { return n.toLocaleString(“de-DE”, {minimumFractionDigits: d, maximumFractionDigits: d}); }
-function nl2br(s) { return s.replace(/\n/g, “<br>”); }
-
-function oakStage(a) {
-if (a < 15) return “Ein zarter Keimling”;
-if (a < 50) return “Ein junger Setzling, biegsam im Wind”;
-if (a < 120) return “Ein aufstrebender Jungbaum”;
-if (a < 250) return “Eine kr\u00e4ftige junge Eiche”;
-if (a < 400) return “Ein stattlicher, ausgewachsener Baum”;
-if (a < 600) return “Eine m\u00e4chtige, alte Eiche”;
-if (a < 750) return “Ein ehrw\u00fcrdiger Baumveteran”;
-return “Eine uralte, legend\u00e4re Eiche”;
-}
-
-// === QUIZ ITEMS BAUEN ===
-function buildQuiz(d, m, y) {
-var birth = new Date(y, m - 1, d);
-var now = new Date();
-var ms = now - birth;
-var days = Math.round(ms / 864e5);
-var yrs = ms / (365.25 * 864e5);
-var mins = ms / 6e4;
-var ratio = yrs / LIFE;
-var weeks = Math.round(days / 7);
-var heart = Math.round(mins * HRATE);
-var hMio = heart / 1e6;
-var moons = Math.floor(days / LUNAR);
-var tears = yrs * TEARS_Y;
-var rot = days * ROTKM;
-var remD = Math.max(0, Math.round((LIFE - yrs) * 365.25));
-var remB = remD * 24 * 60 * BREATH;
-var oAge = OAK * ratio;
-var oY = Math.floor(oAge);
-var oMo = Math.round((oAge - oY) * 12);
-var slp = yrs / 3;
-var meals = days * 3;
-var hair = yrs * HAIR_Y;
-var age = Math.floor(yrs);
-var bStr = d + “.” + m + “.” + y;
-var pct = Math.min(100, ratio * 100);
-
-var arr = [];
-
-// — 1: WOCHEN —
-arr.push({
-bg: “#0e2a35”,
-em: “\uD83D\uDCC5”,
-qq: “Montag, Dienstag, Mittwoch \u2026 und das Ganze wieder von vorn. Wie viele komplette Wochen drehst du dich schon in diesem Hamsterrad?”,
-hi: “Du bist am “ + bStr + “ auf die Welt gekommen. Seitdem hat sich das Wochenkarussell unerm\u00fcdlich gedreht \u2013 durch Schulzeit, Berufsleben, Urlaube und jede Menge Montage, an denen der Wecker zu fr\u00fch klingelte.”,
-val: “~” + fmt(weeks) + “ Wochen”,
-vc: “#90e0ef”,
-sub: fmt(days) + “ Tage, rund “ + age + “ Jahre”,
-ex: fmt(weeks) + “ Wochen! Davon rund “ + fmt(Math.round(weeks * 5 / 7)) + “ Werktage und “ + fmt(Math.round(weeks * 2 / 7)) + “ Wochenendtage. H\u00e4ttest du jeden Montag laut gest\u00f6hnt, w\u00e4ren das “ + fmt(weeks) + “ Seufzer \u2013 genug f\u00fcr einen eigenen Podcast.\n\nZum Vergleich: Die Chinesische Mauer wurde in rund 100.000 Wochen erbaut. Jede deiner “ + fmt(weeks) + “ Wochen war einmalig \u2013 keine l\u00e4sst sich zur\u00fcckspulen.”,
-extra: “”
+h+='<div class="ex">'+nl(it.ex)+'</div>';
+h+='<button class="btnn" id="nb">'+(S<t-1?"N\u00e4chste Frage \u2192":"Quiz beenden \uD83E\uDD42")+'</button>';
+h+='</div></div>';
+document.getElementById("cc").innerHTML=h;
+document.getElementById("rb").addEventListener("click",function(){
+this.className="btnr hide";
+document.getElementById("ad").className="";
+setTimeout(function(){document.getElementById("ad").scrollIntoView({behavior:"smooth",block:"nearest"});},120);
 });
-
-// — 2: HERZSCHLAEGE —
-arr.push({
-bg: “#1a1525”,
-em: “\u2764\uFE0F”,
-qq: “Dein Herz kennt weder Wochenende noch Feiertag. Es schl\u00e4gt und schl\u00e4gt und schl\u00e4gt. Wie viele Millionen Schl\u00e4ge hat es zusammengetrommelt?”,
-hi: “Ein Herz schl\u00e4gt in Ruhe etwa 70 Mal pro Minute. Im Schlaf sackt es auf 50, beim Treppensteigen jagt es auf 140 hoch. Die 70 pro Minute sind ein solider Durchschnitt.”,
-val: “~” + fD(hMio, 1) + “ Millionen”,
-vc: “#f48fb1”,
-sub: “Herzschl\u00e4ge bei 70 Schl\u00e4gen pro Minute”,
-ex: fD(hMio, 1) + “ Millionen Herzschl\u00e4ge \u2013 und dein Herz hat nicht einmal eine Gehaltserh\u00f6hung verlangt. Kein Krankenstand, kein Streik, nicht mal eine Kaffeepause.\n\nPro Tag sind das “ + fmt(Math.round(HRATE * 1440)) + “ Schl\u00e4ge. Hochgerechnet hat es rund “ + fmt(Math.round(heart * 0.07 / 1000)) + “ Tonnen Blut bewegt \u2013 das f\u00fcllt “ + Math.round(heart * 0.00007 / 2.5) + “ Tanklaster.”,
-extra: “”
-});
-
-// — 3: VOLLMONDE —
-arr.push({
-bg: “#121828”,
-em: “\uD83C\uDF15”,
-qq: “Er war schon da, als es noch keine Stra\u00dfenlaternen gab. Wie viele Vollmonde sind seit deiner Geburt \u00fcber den Nachthimmel gezogen?”,
-hi: “Der Mond braucht “ + fD(LUNAR, 2) + “ Tage f\u00fcr einen Zyklus. 12 bis 13 Vollmonde pro Jahr. Manchmal zwei in einem Monat \u2013 der ber\u00fchmte \u201eBlue Moon\u201c.”,
-val: fmt(moons) + “ Vollmonde”,
-vc: “#9fa8da”,
-sub: “bei “ + fD(LUNAR, 2) + “ Tagen pro Mondzyklus”,
-ex: fmt(moons) + “ Vollmonde! Vermutlich hast du 95 % davon verpasst \u2013 geschlafen, ferngesehen oder nicht hochgeschaut.\n\nRund “ + Math.round(moons * 0.04) + “ davon waren Supermonde, bei denen er 14 % gr\u00f6\u00dfer wirkt. Tipp: Beim n\u00e4chsten einfach rausgehen und Kopf in den Nacken.”,
-extra: “”
-});
-
-// — 4: TRAENEN —
-arr.push({
-bg: “#0e2228”,
-em: “\uD83D\uDCA7”,
-qq: “Wie viele Eimer voll Tr\u00e4nen haben deine Augen seit der Geburt produziert? Spoiler: Mit Heulen hat das fast nichts zu tun!”,
-hi: “Die meisten Tr\u00e4nen sind Basaltr\u00e4nen \u2013 ein permanenter Film, der das Auge feucht h\u00e4lt. Dazu Reflextr\u00e4nen (Zwiebeln! Wind!) und emotionale Tr\u00e4nen. Zusammen ca. 0,8 Liter pro Jahr.”,
-val: “~” + fD(tears, 1) + “ Liter”,
-vc: “#4dd0e1”,
-sub: fD(tears / 10, 1) + “ Eimer \u00e0 10 Liter”,
-ex: fD(tears, 1) + “ Liter! Das f\u00fcllt “ + Math.round(tears / 0.2) + “ Weingl\u00e4ser \u2013 wobei man das geschmacklich lassen sollte.\n\n98 % sind Basaltr\u00e4nen, die leise arbeiten. Emotionale Tr\u00e4nen enthalten Stresshormone und nat\u00fcrliche Schmerzmittel. Weinen ist keine Schw\u00e4che, sondern clevere Entgiftung.”,
-extra: “”
-});
-
-// — 5: ERDROTATION —
-arr.push({
-bg: “#1a1a10”,
-em: “\uD83C\uDF0D”,
-qq: “Du sitzt gem\u00fctlich im Sessel und denkst, du bewegst dich nicht? Pustekuchen! Wie viele Millionen Kilometer hat dich die Erdrotation durch den Weltraum geschleudert?”,
-hi: “Auf 50\u00b0 N (Frankfurt\u2013Prag) legt man “ + fmt(Math.round(ROTKM)) + “ km pro Tag zur\u00fcck \u2013 rund “ + fmt(Math.round(ROTKM / 24)) + “ km/h. Schneller als jeder Porsche auf der Autobahn.”,
-val: “~” + fD(rot / 1e6, 1) + “ Mio. km”,
-vc: “#ffcc80”,
-sub: “auf 50\u00b0 N, ca. “ + fmt(Math.round(ROTKM / 24)) + “ km/h”,
-ex: fD(rot / 1e6, 1) + “ Millionen Kilometer \u2013 ohne einen Liter Benzin! Du bist “ + fmt(Math.round(rot / 384400)) + “ Mal zum Mond und zur\u00fcck gereist. Gratis, ohne Stau.\n\nEin Marathonl\u00e4ufer br\u00e4uchte “ + fmt(Math.round(rot / 42 / 365)) + “ Jahre f\u00fcr dieselbe Strecke. Du hast das im Sitzen geschafft. Effizienz!”,
-extra: “”
-});
-
-// — 6: VERBLEIBENDE TAGE —
-var exDays;
-if (remD > 0) {
-exDays = fmt(remD) + “ Tage \u2013 das sind noch “ + fmt(remB) + “ Atemz\u00fcge bis zum theoretischen Ausstieg. Das ist jede Menge Luft! Also keine Panik, leg am besten gleich los.\n\nDu wirst noch rund “ + fmt(remD * 3) + “ Mahlzeiten genie\u00dfen, “ + fmt(Math.round(remD / 7)) + “ Wochenenden erleben und k\u00f6nntest “ + Math.round(remD * 8 / 500) + “ B\u00fccher lesen. Die Frage ist nicht ob genug Zeit bleibt \u2013 sondern wof\u00fcr.”;
-} else {
-exDays = “Du hast die 86 \u00fcberschritten \u2013 Chapeau! Jeder weitere Tag ist Bonuszeit, und die schmeckt bekanntlich am besten.\n\nJeanne Calment wurde 122 \u2013 da geht also noch einiges. Genie\u00df jeden Tag, du hast ihn dir verdient.”;
-}
-
-arr.push({
-bg: “#1a1508”,
-em: “\u23F3”,
-qq: “Mal angenommen, du wirst genau 86 Jahre alt \u2013 wie viele Tage stehen dann ab heute noch auf deinem Lebenskonto? Trau dich hinzuschauen!”,
-hi: “Die durchschnittliche Lebenserwartung liegt bei 86 Jahren \u2013 insgesamt “ + fmt(Math.round(86 * 365.25)) + “ Tage. Klingt viel, aber ein ganzer Teil ist schon weg.”,
-val: remD > 0 ? fmt(remD) + “ Tage” : “Ziel erreicht! \uD83C\uDF89”,
-vc: “#ffb74d”,
-sub: remD > 0 ? “ca. “ + fmt(Math.floor(remD / 365)) + “ Jahre und “ + Math.round((remD % 365) / 30) + “ Monate” : “Bonuszeit!”,
-ex: exDays,
-extra: “”
-});
-
-// — 7: DEUTSCHE EICHE —
-var oakEx = “Als Deutsche Eiche w\u00e4rst du “ + fmt(oY) + “ Jahre alt \u2013 “ + oakStage(oAge).toLowerCase() + “. “;
-if (oAge < 250) oakEx += “Du h\u00e4ttest noch Jahrhunderte, um richtig dicke Rinde zu entwickeln.”;
-else oakEx += “Du w\u00e4rst schon eine imposante Erscheinung in der Landschaft.”;
-oakEx += “\n\nDie Femeiche in Raesfeld-Erle ist 600\u2013850 Jahre alt. Als sie keimte, regierte Kaiser Karl IV. “;
-if (oY > 400) oakEx += “Du w\u00e4rst fast genauso ehrw\u00fcrdig!”;
-else if (oY > 200) oakEx += “Auf dem besten Weg dorthin!”;
-else oakEx += “Noch ein Jungspund \u2013 aber erstklassiges Holz!”;
-
-arr.push({
-bg: “#0a1a12”,
-em: “\uD83C\uDF33”,
-qq: “Die Deutsche Eiche wird 830 Jahre alt und hat K\u00f6nige, Kriege und Klimawandel \u00fcberlebt. Wenn du eine w\u00e4rst \u2013 knorriger Riese oder d\u00fcnnes St\u00f6ckchen?”,
-hi: “Eine Deutsche Eiche w\u00e4chst langsam, aber ausdauernd. Erst mit 60\u201380 Jahren wird sie stattlich. Ihre besten Eicheln produziert sie mit 100\u2013200 Jahren. Dein Lebensanteil wird proportional auf 830 Eichen-Jahre \u00fcbertragen.”,
-val: fmt(oY) + “ Jahre, “ + oMo + “ Monate”,
-vc: “#52b788”,
-sub: oakStage(oAge),
-ex: oakEx,
-extra: “oak”,
-oakPct: pct,
-oakY: oY,
-oakAge: oAge
-});
-
-// — 8: SCHLAF —
-var slpEx = fD(slp, 1) + “ Jahre geschlafen! Das ist “;
-if (slp > 20) slpEx += “mehr als manche Ehe gehalten hat”;
-else slpEx += “eine beachtliche Leistung”;
-slpEx += “ \u2013 und definitiv mehr als du je vor dem Fernseher verbracht hast (hoffentlich).\n\nIn dieser Zeit hast du rund “ + fmt(Math.round(days * 5)) + “ Tr\u00e4ume gehabt \u2013 pro Nacht etwa f\u00fcnf. Ohne Schlaf halluziniert das Gehirn nach drei Tagen. Schlaf ist kein Luxus \u2013 er ist Wartung.”;
-
-arr.push({
-bg: “#12122a”,
-em: “\uD83D\uDE34”,
-qq: “Du h\u00e4ltst dich f\u00fcr aktiv? Dann halt dich fest: Einen erschreckend gro\u00dfen Teil deines Lebens hast du mit geschlossenen Augen und offenem Mund im Bett verbracht. Wie viele Jahre?”,
-hi: “Ein Mensch schl\u00e4ft im Schnitt 8 Stunden pro Nacht \u2013 exakt ein Drittel des Tages. Babys 16 Stunden, Teenager gef\u00fchlt 20. Der Durchschnitt von 8 Stunden ist medizinisch gut belegt.”,
-val: “~” + fD(slp, 1) + “ Jahre”,
-vc: “#818cf8”,
-sub: “bei 8 Stunden Schlaf pro Nacht”,
-ex: slpEx,
-extra: “”
-});
-
-// — 9: MAHLZEITEN —
-var mealEx = fmt(meals) + “ Mahlzeiten! Bei je 20 Minuten w\u00e4ren das “ + fD(meals * 20 / 60 / 24 / 365.25, 1) + “ Jahre nur mit Essen.\n\nW\u00e4ren das alles Schnitzel (200 g), h\u00e4ttest du “ + fD(meals * 0.2 / 1000, 1) + “ Tonnen vertilgt \u2013 das Gewicht von “ + Math.round(meals * 0.2 / 1000 / 1.5) + “ K\u00fchen. Guten Appetit \u2013 “;
-if (remD > 0) mealEx += “noch “ + fmt(remD * 3) + “ Mahlzeiten stehen auf dem Programm!”;
-else mealEx += “es ist nicht die letzte!”;
-
-arr.push({
-bg: “#1a1508”,
-em: “\uD83C\uDF7D\uFE0F”,
-qq: “Fr\u00fchst\u00fcck, Mittag, Abendbrot \u2013 und das St\u00fcck Kuchen, das offiziell \u201enicht z\u00e4hlt\u201c. Wie viele Mahlzeiten hast du verdr\u00fcckt?”,
-hi: “Drei Hauptmahlzeiten am Tag sind Standard \u2013 Kaffee und Kuchen ist gro\u00dfz\u00fcgigerweise nicht mitgez\u00e4hlt. Auch nicht die Gummib\u00e4rchen abends auf dem Sofa.”,
-val: “~” + fmt(meals),
-vc: “#fbbf72”,
-sub: fD(meals / 1e6, 2) + “ Millionen Mal Messer und Gabel”,
-ex: mealEx,
-extra: “”
-});
-
-// — 10: HAARE —
-var hairEx = fmt(Math.round(hair)) + “ Kilometer Haar! Das sind “ + fmt(Math.round(hair / 42)) + “ Marathonstrecken \u2013 allerdings w\u00e4re Laufen darauf schwierig.\n\n”;
-if (hair > 800) hairEx += “Dein Haarfaden reicht locker bis Rom.”;
-else if (hair > 500) hairEx += “Dein Haarfaden reicht bis Paris.”;
-else hairEx += “Ein stattlicher Haarfaden!”;
-hairEx += “ Und das Verr\u00fcckte: Selbst wenn oben die Lichtungen gr\u00f6\u00dfer werden \u2013 die Seiten produzieren unbeirrt weiter. Die Fabrik schlie\u00dft nicht, sie reduziert h\u00f6chstens die Schicht.”;
-
-arr.push({
-bg: “#101a10”,
-em: “\uD83D\uDC87”,
-qq: “Dein Kopf ist eine kleine Haarfabrik, rund um die Uhr. Wenn du alle Haare aneinanderlegen w\u00fcrdest \u2013 wie weit k\u00e4mst du?”,
-hi: “Auf einem Kopf wachsen 100.000 Haare, jedes ca. 1 cm pro Monat. Rund 85 % sind aktiv am Wachsen. Zusammen: etwa 10 Kilometer Haar pro Jahr. Ja \u2013 Kilometer!”,
-val: “~” + fmt(Math.round(hair)) + “ Kilometer”,
-vc: “#a8d886”,
-sub: “Gesamtl\u00e4nge aller Haare aneinandergelegt”,
-ex: hairEx,
-extra: “”
-});
-
-return arr;
-}
-
-// === QUIZ ENGINE ===
-var quizItems = [];
-var curStep = 0;
-
-document.getElementById(“goBtn”).addEventListener(“click”, function() {
-var d = parseInt(ddEl.value);
-var m = parseInt(mmEl.value);
-var y = parseInt(yyEl.value);
-var errEl = document.getElementById(“err”);
-
-if (!d || !m || !y || y < 1900 || y > 2026) {
-errEl.textContent = “Bitte gib ein g\u00fcltiges Datum ein.”;
-errEl.className = “err”;
-return;
-}
-var b = new Date(y, m - 1, d);
-if (b.getMonth() !== m - 1 || b.getDate() !== d) {
-errEl.textContent = “Dieses Datum existiert nicht.”;
-errEl.className = “err”;
-return;
-}
-if (new Date() - b < 0) {
-errEl.textContent = “Zeitreisende bitte warten!”;
-errEl.className = “err”;
-return;
-}
-errEl.className = “err hide”;
-
-quizItems = buildQuiz(d, m, y);
-curStep = 0;
-document.getElementById(“S1”).className = “hide”;
-document.getElementById(“S2”).className = “”;
-renderCard();
-});
-
-function renderCard() {
-var total = quizItems.length;
-var it = quizItems[curStep];
-
-document.getElementById(“pf”).style.width = (curStep / total * 100) + “%”;
-document.getElementById(“sc”).textContent = “Frage “ + (curStep + 1) + “ von “ + total;
-
-var h = “”;
-h += ‘<div class="card" style="background:' + it.bg + '">’;
-h += ‘<span class="em">’ + it.em + ‘</span>’;
-h += ‘<div class="qq">’ + it.qq + ‘</div>’;
-h += ‘<div class="hb"><div class="hl">\uD83D\uDCA1 Wusstest du?</div>’;
-h += ‘<div class="ht">’ + it.hi + ‘</div></div>’;
-h += ‘<button class="btnr" id="revBtn">Antwort aufdecken</button>’;
-h += ‘<div id="ansDiv" class="hide">’;
-h += ‘<div class="rv" style="color:' + it.vc + '">’ + it.val + ‘</div>’;
-h += ‘<div class="rs">’ + it.sub + ‘</div>’;
-
-if (it.extra === “oak”) {
-h += ‘<div class="obar"><div class="ofill" style="width:' + it.oakPct + '%"></div></div>’;
-h += ‘<div class="sbox"><div class="snm">’ + oakStage(it.oakAge) + ‘</div>’;
-h += ‘<div class="sdt">’ + fmt(it.oakY) + ’ von ’ + fmt(OAK) + ’ m\u00f6glichen Jahren</div></div>’;
-}
-
-h += ‘<div class="ex">’ + nl2br(it.ex) + ‘</div>’;
-
-var btnTxt = curStep < total - 1 ? “N\u00e4chste Frage \u2192” : “Quiz beenden \uD83E\uDD42”;
-h += ‘<button class="btnn" id="nxtBtn">’ + btnTxt + ‘</button>’;
-h += ‘</div></div>’;
-
-document.getElementById(“cc”).innerHTML = h;
-
-document.getElementById(“revBtn”).addEventListener(“click”, function() {
-this.className = “btnr hide”;
-document.getElementById(“ansDiv”).className = “”;
-var ad = document.getElementById(“ansDiv”);
-setTimeout(function() { ad.scrollIntoView({behavior: “smooth”, block: “nearest”}); }, 120);
-});
-
-document.getElementById(“nxtBtn”).addEventListener(“click”, function() {
-curStep++;
-if (curStep < total) {
-renderCard();
-window.scrollTo({top: 0, behavior: “smooth”});
-} else {
-document.getElementById(“S2”).className = “hide”;
-document.getElementById(“pf”).style.width = “100%”;
-document.getElementById(“et”).textContent = “10 Fragen, 10 Antworten \u2013 und hoffentlich ein paar Aha-Momente und Schmunzler. Dein Leben in Zahlen ist beeindruckend. Und das Beste: Es kommen jeden Tag neue dazu. Prost!”;
-document.getElementById(“S3”).className = “end”;
-window.scrollTo({top: 0, behavior: “smooth”});
+document.getElementById("nb").addEventListener("click",function(){
+S++;
+if(S<t){show();window.scrollTo({top:0,behavior:"smooth"});}
+else{
+document.getElementById("S2").className="hide";
+document.getElementById("et").textContent="10 Fragen, 10 Antworten \u2013 und hoffentlich ein paar Aha-Momente und Schmunzler. Dein Leben in Zahlen ist beeindruckend. Prost!";
+document.getElementById("S3").className="end";
+window.scrollTo({top:0,behavior:"smooth"});
 }
 });
 }
-
-document.getElementById(“reBtn”).addEventListener(“click”, function() {
-document.getElementById(“S3”).className = “hide end”;
-document.getElementById(“S1”).className = “”;
-window.scrollTo({top: 0, behavior: “smooth”});
+document.getElementById("reBtn").addEventListener("click",function(){
+document.getElementById("S3").className="hide end";
+document.getElementById("S1").className="";
+window.scrollTo({top:0,behavior:"smooth"});
 });
 </script>
 
