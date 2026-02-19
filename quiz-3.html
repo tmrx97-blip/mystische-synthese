@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Das Große Erfurt-Quiz des Lebens</title>
+    
+    <style>
+        :root {
+            --apple-blue: #007AFF;
+            --apple-gray: #F2F2F7;
+            --gold: #D4AF37;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--apple-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #app {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { color: #333; font-size: 1.5rem; margin-bottom: 20px; }
+        p { color: #666; line-height: 1.5; }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .result-box {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--apple-blue);
+            margin: 20px 0;
+        }
+
+        .fun-fact {
+            font-style: italic;
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid var(--gold);
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--apple-blue);
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="progressContainer" style="display:none;">
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    </div>
+
+    <div id="screen-start" class="screen active">
+        <h1>Dein Lebens-Check</h1>
+        <p>Wähle dein Datum und deinen Ort, um die Reise durch deine persönliche Statistik zu beginnen.</p>
+        <input type="date" id="inputDate" value="1990-01-01">
+        <input type="text" id="inputCity" placeholder="Stadt (z.B. Erfurt)">
+        <button onclick="startQuiz()">Quiz starten</button>
+    </div>
+
+    <div id="screen-quiz" class="screen">
+        <h2 id="questionTitle">Frage</h2>
+        <div id="questionText">Text</div>
+        <div class="result-box" id="resultValue">--</div>
+        <div class="fun-fact" id="funFact">Erklärung</div>
+        <button id="nextBtn" onclick="nextQuestion()">Weiter</button>
+    </div>
+
+    <div id="screen-end" class="screen">
+        <h1>Fertig!</h1>
+        <p>Du hast alle 15 Fragen durchlaufen. Du bist ein echtes Wunderwerk der Natur (und der Statistik)!</p>
+        <button onclick="location.reload()">Nochmal von vorn</button>
+    </div>
+</div>
+
+<script>
+    let currentStep = 0;
+    let userData = { date: null, city: "", days: 0 };
+
+    const questions = [
+        {
+            title: "Nachwuchs",
+            calc: (d) => Math.round(d * 0.02) + " Babys",
+            text: (c) => `Wie viele neue Erdenbürger sind in <strong>${c}</strong> seit deinem Datum geschlüpft?`,
+            fact: "Wusstest du, dass Babys am Anfang 300 Knochen haben, Erwachsene aber nur 206? Du hast also im Laufe der Zeit ordentlich 'abgebaut'!"
+        },
+        {
+            title: "Sonnenstunden",
+            calc: (d) => Math.round(d * 4.4).toLocaleString() + " Std.",
+            text: (c) => `Wie viele Stunden hat die Sonne in <strong>${c}</strong> seitdem extra für dich Überstunden gemacht?`,
+            fact: "Genug Licht, um eine Melone allein durch deine Anwesenheit zum Platzen zu bringen. Theoretisch."
+        },
+        {
+            title: "Schnee-Chaos",
+            calc: (d) => (d * 0.11).toFixed(1) + " Meter",
+            text: (c) => `Wenn jede Flocke, die seitdem in <strong>${c}</strong> fiel, liegen geblieben wäre: Wie hoch müsstest du dich aus dem Haus graben?`,
+            fact: "Das entspricht in etwa der Höhe eines mittelgroßen Dinosauriers. Stell dir vor, du hättest den im Vorgarten!"
+        },
+        {
+            title: "Die neue Haut",
+            calc: (d) => Math.round(d / 27) + ". Haut",
+            text: () => `In der wievielten Haut steckst du heute eigentlich?`,
+            fact: "Du verlierst pro Jahr etwa 4kg Hautschuppen. Davon ernähren sich ganze Generationen von Milben unter deiner Matratze. Gern geschehen!"
+        },
+        {
+            title: "Blinzel-Marathon",
+            calc: (d) => (d * 0.015).toFixed(1) + " Mio. Mal",
+            text: () => `Wie oft haben deine Augenlider seitdem 'Guten Tag' gesagt?`,
+            fact: "Hättest du dabei jedes Mal laut geklatscht, wärst du jetzt taub und deine Hände nur noch Staub."
+        },
+        {
+            title: "Herz-Kran-Leistung",
+            calc: (d) => Math.round(d * 5.8).toLocaleString() + " Meter",
+            text: () => `Wenn dein Herz ein Baukran wäre: Wie hoch hätte es einen 1,5-Tonnen-Wagen seitdem gehievt?`,
+            fact: "Das ist höher als die Reiseflughöhe eines Urlaubsfliegers. Dein Herz verdient definitiv eine Gehaltserhöhung."
+        },
+        {
+            title: "Atemzüge",
+            calc: (d) => (d * 0.000008).toFixed(6) + " Mrd. Liter",
+            text: () => `Wieviele Heissluftballons hast du schon prall voll mit deinem Ausatmen gefüllt?`,
+            fact: "Das sind ca. " + (currentStep === 6 ? Math.round(userData.days * 8.6 / 3000) : 0) + " Ballons. Reicht für eine kleine Invasion von oben!"
+        },
+        {
+            title: "Achselhaar-Urwald",
+            calc: (d) => (d * 0.04).toFixed(1) + " cm",
+            text: () => `Wenn du deine Achselhaare nie rasiert hättest: Wie hoch wäre der Wildwuchs jetzt?`,
+            fact: "Man könnte daraus wahrscheinlich einen sehr kleinen, sehr kratzigen Pullover für ein Meerschweinchen stricken."
+        },
+        {
+            title: "Die Bratwurst-Kette",
+            calc: (d) => (d * 0.00002).toFixed(2) + " km",
+            text: () => `Wie viele Kilometer lang wäre die Kette aus Thüringer Rostbratwürsten, die DU allein seitdem verputzt hast?`,
+            fact: "Das sind ca. " + (currentStep === 8 ? Math.round(userData.days / 12) : 0) + " Würste. Senf nicht mitgerechnet!"
+        },
+        {
+            title: "Pipi-Power",
+            calc: (d) => Math.round((d * 1.5) / 150) + " Badewannen",
+            text: () => `Wieviele Badewannen hättest du mit deinem 'Pipi' seitdem gefüllt?`,
+            fact: "Rein rechnerisch hättest du genug Flüssigkeit produziert, um ein olympisches Schwimmbecken zu füllen – vorausgesetzt, du hättest 4.500 Jahre Zeit."
+        },
+        {
+            title: "Die Pups-Hülle",
+            calc: (d) => (d * 1.2).toFixed(0) + " Liter Gas",
+            text: () => `Wenn man all deine Winde in einen Ballon geleitet hätte: Wie groß wäre er?`,
+            fact: "Das Volumen entspricht etwa dem Innenraum eines VW Golf. Eine mobile Gaskammer der heiteren Art!"
+        },
+        {
+            title: "Das Rülps-Orchester",
+            calc: (d) => Math.round(d / 4).toLocaleString() + " Rülpser",
+            text: () => `Wieviele Flugzeuge würdest du lautstärkemäßig übertönen, wenn man all deine Rülpser bündeln würde?`,
+            fact: "Ein einziger gebündelter Mammut-Rülpser würde die Schallmauer durchbrechen und in Erfurt alle Fenster zittern lassen."
+        },
+        {
+            title: "Die Spucke-Oase",
+            calc: (d) => Math.round(d * 1) + " Liter",
+            text: () => `Hättest du mit deiner Speichelproduktion seitdem eher einen Stadtpark oder eine ganze Oase bewässert?`,
+            fact: "Du hast genug Spucke produziert, um eine Fläche von " + (currentStep === 12 ? Math.round(userData.days / 5) : 0) + " m² in der Wüste zum Blühen zu bringen. Eine echte Sabber-Oase!"
+        },
+        {
+            title: "Die Mond-Reise",
+            calc: (d) => (d * 3.75 / 384400 * 100).toFixed(4) + " %",
+            text: () => `Wie viel Prozent der Strecke zum Mond hättest du seit diesem Tag bereits zurückgelegt?`,
+            fact: "Kleiner Schritt für dich, aber ein großer Haufen abgelaufener Schuhsohlen für die Menschheit."
+        },
+        {
+            title: "Gedanken-Gewitter",
+            calc: (d) => (d * 480).toLocaleString() + " Watt-Std.",
+            text: () => `Wie viele 60-Watt-Glühbirnen hätte dein Gehirn seitdem für eine Stunde leuchten lassen können?`,
+            fact: "Dein Kopf ist ein Kraftwerk! Leider wird die meiste Energie für die Frage 'Wo ist mein Schlüssel?' verbraucht."
+        }
+    ];
+
+    function startQuiz() {
+        const dateVal = document.getElementById('inputDate').value;
+        const cityVal = document.getElementById('inputCity').value || "Erfurt";
+        
+        if(!dateVal) return alert("Bitte Datum wählen!");
+
+        const birthDate = new Date(dateVal);
+        const today = new Date();
+        const diffTime = Math.abs(today - birthDate);
+        userData.days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        userData.city = cityVal;
+
+        document.getElementById('screen-start').classList.remove('active');
+        document.getElementById('screen-quiz').classList.add('active');
+        document.getElementById('progressContainer').style.display = 'block';
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentStep];
+        document.getElementById('questionTitle').innerText = q.title;
+        document.getElementById('questionText').innerHTML = q.text(userData.city);
+        document.getElementById('resultValue').innerText = q.calc(userData.days);
+        document.getElementById('funFact').innerText = q.fact;
+        
+        const progress = ((currentStep + 1) / questions.length) * 100;
+        document.getElementById('progress').style.width = progress + "%";
+    }
+
+    function nextQuestion() {
+        currentStep++;
+        if(currentStep < questions.length) {
+            showQuestion();
+        } else {
+            document.getElementById('screen-quiz').classList.remove('active');
+            document.getElementById('screen-end').classList.add('active');
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
