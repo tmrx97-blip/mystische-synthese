@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lebens-Check Quiz</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LebensCheck">
+    
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        h1 { font-size: 24px; margin-bottom: 20px; }
+        p { font-size: 18px; line-height: 1.5; }
+
+        .input-group { margin: 25px 0; }
+        
+        label { display: block; margin-bottom: 8px; font-weight: bold; text-align: left; }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+
+        button:active { transform: scale(0.98); }
+
+        .quiz-step { display: none; animation: fadeIn 0.5s; }
+        .quiz-step.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .result-val { font-size: 28px; font-weight: 800; color: var(--accent); display: block; margin: 15px 0; }
+        .progress { font-size: 12px; color: #999; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="step-0" class="quiz-step active">
+        <h1>Der Lebens-Check</h1>
+        <p>Lass uns berechnen, was du seit deiner Geburt alles bewegt hast.</p>
+        
+        <div class="input-group">
+            <label>Dein Geburtsdatum:</label>
+            <input type="date" id="birthdate" value="1970-01-01">
+        </div>
+        
+        <div class="input-group">
+            <label>Dein Geburtsort:</label>
+            <select id="location">
+                <option value="jena">Jena</option>
+                <option value="erfurt">Erfurt</option>
+                <option value="gera">Gera</option>
+                <option value="brotterode">Brotterode</option>
+            </select>
+        </div>
+        
+        <button onclick="startQuiz()">Quiz starten</button>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    let userData = { date: '', location: '', days: 0, years: 0 };
+    let currentStep = 1;
+
+    // HISTORISCHE DATENBANK (Geburten pro Jahr Schnitt)
+    const birthDb = {
+        jena: { pre90: 1700, dip90: 650, post00: 1350 },
+        erfurt: { pre90: 2800, dip90: 1100, post00: 2100 },
+        gera: { pre90: 1600, dip90: 450, post00: 850 },
+        brotterode: { pre90: 75, dip90: 25, post00: 45 }
+    };
+
+    function startQuiz() {
+        const bdate = new Date(document.getElementById('birthdate').value);
+        const now = new Date();
+        const diffTime = Math.abs(now - bdate);
+        
+        userData.days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        userData.years = userData.days / 365.25;
+        userData.location = document.getElementById('location').value;
+        userData.date = bdate;
+
+        renderQuestion(1);
+    }
+
+    function calculateResults(step) {
+        const d = userData.days;
+        const y = userData.years;
+        const loc = userData.location;
+
+        switch(step) {
+            case 1: // Nachwuchs
+                let total = 0;
+                let startYear = userData.date.getFullYear();
+                for(let i = startYear; i <= 2026; i++) {
+                    if(i < 1990) total += birthDb[loc].pre90;
+                    else if(i < 2000) total += birthDb[loc].dip90;
+                    else total += birthDb[loc].post00;
+                }
+                return Math.floor(total).toLocaleString('de-DE');
+            
+            case 2: // Sonne
+                let sunH = (loc === 'jena') ? 1730 : 1650;
+                return Math.floor(y * sunH).toLocaleString('de-DE');
+
+            case 3: // Nahrung (Rinder & Elefanten)
+                let beef = (y * 60) / 250;
+                let ele = (d * 0.968) / 5000;
+                return `${beef.toFixed(1)} Rindern UND zusätzlich ${ele.toFixed(1)} Elefanten`;
+
+            case 4: // Haut
+                return Math.floor(d / 28).toLocaleString('de-DE');
+
+            case 5: // Herz-Kran
+                let height = (d * 131000) / (1500 * 9.81);
+                return Math.floor(height).toLocaleString('de-DE') + " Meter";
+
+            case 6: // Atemluft
+                let airM3 = (d * 1440 * 8.5) / 1000; // 8.5L/min Schnitt
+                let balloons = airM3 / 3000;
+                return balloons.toFixed(1);
+
+            case 7: // Erd-Reise
+                let km = d * 3.5;
+                return (km / 40075).toFixed(1);
+
+            case 8: // Achselhaar
+                return (d * 0.03).toFixed(1);
+
+            case 9: // Bratwurst
+                let sausages = (y * 52 * 0.7);
+                return (sausages * 0.2 / 1000).toFixed(2);
+
+            case 10: // Pipi
+                return Math.floor((d * 1.5) / 150).toLocaleString('de-DE');
+
+            case 11: // Pups
+                return (d * 0.001).toFixed(1);
+
+            case 12: // Rülpser
+                // Logarithmische Energie-Summe: 10 * log10(Anzahl * 10^(100/10)) / 140
+                let rCount = d * 1.2;
+                let jets = (10 * Math.log10(rCount * Math.pow(10, 10))) / 140;
+                return jets.toFixed(1);
+
+            case 13: // Spucke
+                let area = d / 20;
+                let type = (area < 150) ? "einen Vorgarten" : (area < 2500 ? "eine Oase in der Wüste" : "einen Stadtpark");
+                return type;
+        }
+    }
+
+    function renderQuestion(step) {
+        const questions = [
+            "",
+            `Nachwuchs: „Wie viele neue Erdenbürger sind in ${userData.location.charAt(0).toUpperCase() + userData.location.slice(1)} seit deinem Geburtsdatum geschlüpft?“`,
+            `Sonnenstunden: „Wie viele Stunden hat die Sonne in ${userData.location} seitdem extra für dich Überstunden gemacht?“`,
+            `Nahrungsaufnahme: „Wie viele Rinder und Elefanten hast du insgesamt verspeist?“`,
+            `Die neue Haut: „Du bist eine Schlange! In der wievielten komplett runderneuerten Haut steckst du heute?“`,
+            `Herz-Kran-Leistung: „Wie viele Meter hoch hätte dein Herz einen 1,5-Tonnen-Wagen seitdem schon in den Himmel gehievt?“`,
+            `Atemluftvolumen: „Wie vielen Heißluftballons entspricht die Luft, die du seitdem in die Welt geblasen hast?“`,
+            `Die ERD-Reise: „Du läufst und läufst... Wie oft schon hast du seit diesem Tag die Erde umrundet?“`,
+            `Achselhaar-Urwald: „Wie viele Zentimeter Wildwuchs hättest du unter den Armen, wenn du nie rasiert hättest?“`,
+            `Die Bratwurst-Kette: „Wie viele Kilometer lang wäre die Kette aus Thüringer Rostbratwürsten, die du verputzt hast?“`,
+            `Badewannen-Pipi: „Wie viele Standard-Badewannen hättest du mit deinem Pipi seitdem gefüllt?“`,
+            `Die Pups-Hülle: „Welches Volumen in m³ hätte ein Ballon, der all deine Winde seit deiner Geburt aufgefangen hätte?“`,
+            `Das Rülps-Orchester: „Wie viele Düsenjets würdest du lautstärkemäßig übertönen, wenn man all deine Rülpser bündeln würde?“`,
+            `Die Spucke-Oase: „Hättest du mit deinem Speichel eher einen Vorgarten, eine Oase oder einen Stadtpark zum Blühen gebracht?“`
+        ];
+
+        const val = calculateResults(step);
+        const container = document.getElementById('quiz-container');
+        document.getElementById('step-0').classList.remove('active');
+
+        container.innerHTML = `
+            <div class="quiz-step active">
+                <p>${questions[step]}</p>
+                <span class="result-val">${val}</span>
+                ${step < 13 ? `<button onclick="renderQuestion(${step + 1})">Nächste Frage</button>` : `<button onclick="location.reload()">Neustart</button>`}
+                <div class="progress">Frage ${step} von 13</div>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>
